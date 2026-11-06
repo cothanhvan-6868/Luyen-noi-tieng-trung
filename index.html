@@ -386,11 +386,18 @@
                 <h3 class="text-sm font-bold text-white">Thêm câu hỏi luyện nói mới</h3>
                 <form onsubmit="addNewQuestion(event)" class="space-y-3">
                     <div>
-                        <label class="text-xs font-medium text-slate-400">Thêm vào Bài học số mấy?:</label>
+                        <label class="text-xs font-medium text-slate-400">Chọn Cấp Độ HSK:</label>
+                        <select id="input-new-hsk" onchange="updateTeacherLessonDropdown(this.value)" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-cyan-400 font-bold focus:outline-none focus:border-indigo-500 mb-2">
+                            <option value="HSK1">HSK 1</option>
+                            <option value="HSK2">HSK 2</option>
+                            <option value="HSK3">HSK 3</option>
+                            <option value="HSK4">HSK 4</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Chọn Bài Học:</label>
                         <select id="input-new-lesson-id" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-cyan-400 font-bold focus:outline-none focus:border-indigo-500">
-                            <option value="1">Bài 1: Chào hỏi & Tên tuổi</option>
-                            <option value="2">Bài 2: Quốc tịch & Quê quán</option>
-                            <option value="3">Bài 3: Sở thích & Ăn uống</option>
+                            <!-- Populated dynamically -->
                         </select>
                     </div>
                     <div>
@@ -587,6 +594,7 @@
 
         window.onload = function() {
             updateLessonSelectDropdown();
+            updateTeacherLessonDropdown("HSK1");
             initSpeechRecognition();
         };
 
@@ -603,9 +611,22 @@
                 lessonSelect.appendChild(opt);
             }
 
-            // Default selecting lesson 1
             currentLessonId = "1";
             loadLessonQuestions();
+        }
+
+        function updateTeacherLessonDropdown(hskLevel) {
+            const lessonSelect = document.getElementById('input-new-lesson-id');
+            if (!lessonSelect) return;
+            lessonSelect.innerHTML = "";
+
+            const titlesMap = lessonTitles[hskLevel] || {};
+            for (let lId in titlesMap) {
+                let opt = document.createElement('option');
+                opt.value = lId;
+                opt.textContent = titlesMap[lId];
+                lessonSelect.appendChild(opt);
+            }
         }
 
         function changeHskLevel(val) {
@@ -993,20 +1014,28 @@
                 teacherView.classList.remove('hidden');
                 btnTeacher.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
                 btnStudent.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+                
+                // Initialize teacher lesson dropdown based on current selected HSK
+                const teacherHskSelect = document.getElementById('input-new-hsk');
+                if (teacherHskSelect) {
+                    teacherHskSelect.value = currentHsk;
+                    updateTeacherLessonDropdown(currentHsk);
+                }
             }
         }
 
         // TEACHER: ADD NEW QUESTION
         function addNewQuestion(e) {
             e.preventDefault();
+            const teacherHsk = document.getElementById('input-new-hsk').value;
             const lessonId = document.getElementById('input-new-lesson-id').value;
             const zh = document.getElementById('input-new-zh').value;
             const pinyin = document.getElementById('input-new-pinyin').value;
             const vi = document.getElementById('input-new-vi').value;
             const sample = document.getElementById('input-new-sample').value;
 
-            if (!lessonsData[currentHsk]) lessonsData[currentHsk] = {};
-            if (!lessonsData[currentHsk][lessonId]) lessonsData[currentHsk][lessonId] = [];
+            if (!lessonsData[teacherHsk]) lessonsData[teacherHsk] = {};
+            if (!lessonsData[teacherHsk][lessonId]) lessonsData[teacherHsk][lessonId] = [];
 
             const newQ = {
                 id: Date.now(),
@@ -1018,8 +1047,8 @@
                 samplePinyin: ""
             };
 
-            lessonsData[currentHsk][lessonId].push(newQ);
-            alert(`Đã thêm câu hỏi thành công vào ${currentHsk} - Bài ${lessonId}!`);
+            lessonsData[teacherHsk][lessonId].push(newQ);
+            alert(`Đã thêm câu hỏi thành công vào ${teacherHsk} - Bài ${lessonId}!`);
             e.target.reset();
             loadLessonQuestions();
         }
