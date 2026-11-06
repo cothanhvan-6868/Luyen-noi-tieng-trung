@@ -114,20 +114,32 @@
         <section id="student-view" class="space-y-6">
             
             <!-- LESSON SELECTOR & STUDENT INFO BAR -->
-            <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center space-x-3 w-full sm:w-auto">
-                    <i class="fa-solid fa-book-bookmark text-indigo-400"></i>
-                    <label for="lesson-select" class="text-xs font-bold text-slate-300 whitespace-nowrap">Chọn Bài Học:</label>
-                    <select id="lesson-select" onchange="changeLesson(this.value)" class="px-3 py-1.5 bg-slate-950 border border-indigo-500/50 rounded-xl text-xs font-bold text-cyan-400 focus:outline-none focus:border-cyan-400 w-full sm:w-64 cursor-pointer">
-                        <option value="1">Bài 1: Chào hỏi & Tên tuổi (HSK 1)</option>
-                        <option value="2">Bài 2: Quốc tịch & Quê quán (HSK 1)</option>
-                        <option value="3">Bài 3: Sở thích & Ăn uống (HSK 1)</option>
-                    </select>
+            <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-col md:flex-row items-center justify-between gap-4">
+                <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                    <!-- CHỌN TRÌNH ĐỘ HSK -->
+                    <div class="flex items-center space-x-2">
+                        <i class="fa-solid fa-graduation-cap text-cyan-400"></i>
+                        <label for="hsk-select" class="text-xs font-bold text-slate-300 whitespace-nowrap">Trình Độ:</label>
+                        <select id="hsk-select" onchange="changeHskLevel(this.value)" class="px-3 py-1.5 bg-slate-950 border border-cyan-500/50 rounded-xl text-xs font-bold text-cyan-400 focus:outline-none focus:border-cyan-400 cursor-pointer">
+                            <option value="HSK1">HSK 1 (10 Bài)</option>
+                            <option value="HSK2">HSK 2 (10 Bài)</option>
+                            <option value="HSK3">HSK 3 (20 Bài)</option>
+                            <option value="HSK4">HSK 4 (20 Bài)</option>
+                        </select>
+                    </div>
+
+                    <!-- CHỌN BÀI HỌC -->
+                    <div class="flex items-center space-x-2">
+                        <label for="lesson-select" class="text-xs font-bold text-slate-300 whitespace-nowrap">Bài Học:</label>
+                        <select id="lesson-select" onchange="changeLesson(this.value)" class="px-3 py-1.5 bg-slate-950 border border-indigo-500/50 rounded-xl text-xs font-bold text-indigo-300 focus:outline-none focus:border-indigo-400 cursor-pointer min-w-[160px]">
+                            <!-- Menu bài sẽ tự động cập nhật theo HSK đã chọn -->
+                        </select>
+                    </div>
                 </div>
 
-                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                <div class="flex items-center space-x-3 w-full md:w-auto">
                     <label for="student-name-input" class="text-xs font-medium text-slate-300 whitespace-nowrap">Họ tên học sinh:</label>
-                    <input type="text" id="student-name-input" value="Học sinh Nguyễn Văn A" placeholder="Nhập tên..." class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-56">
+                    <input type="text" id="student-name-input" value="Học sinh Nguyễn Văn A" placeholder="Nhập tên..." class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full md:w-48">
                 </div>
             </div>
 
@@ -420,72 +432,551 @@
             }
         }
 
-        // Multi-Lesson Database Structure
-        let lessonsData = {
-            "1": [
-                {
-                    id: 101,
-                    zh: "你叫什么名字？",
-                    pinyin: "Nǐ jiào shénme míngzì?",
-                    vi: "Tên của bạn là gì?",
-                    sampleZh: "我叫李华 / 我是李华",
-                    validAnswers: ["我叫", "我是", "叫"],
-                    samplePinyin: "Wǒ jiào Lǐ Huá / Wǒ shì Lǐ Huá"
-                },
-                {
-                    id: 102,
-                    zh: "你好吗？",
-                    pinyin: "Nǐ hǎo ma?",
-                    vi: "Bạn có khỏe không?",
-                    sampleZh: "我很好 / 我挺好的 / 还行",
-                    validAnswers: ["很好", "挺好", "还行", "不错", "好"],
-                    samplePinyin: "Wǒ hěn hǎo / Wǒ tǐng hǎo de"
-                }
-            ],
-            "2": [
-                {
-                    id: 201,
-                    zh: "你是哪国人？",
-                    pinyin: "Nǐ shì nǎ guó rén?",
-                    vi: "Bạn là người nước nào?",
-                    sampleZh: "我是越南人 / 我来自越南",
-                    validAnswers: ["我是越南人", "越南人", "来自越南"],
-                    samplePinyin: "Wǒ shì Yuènán rén"
-                }
-            ],
-            "3": [
-                {
-                    id: 301,
-                    zh: "你喜欢吃什么？",
-                    pinyin: "Nǐ xǐhuān chī shénme?",
-                    vi: "Bạn thích ăn gì?",
-                    sampleZh: "我喜欢吃中国菜 / 我喜欢吃米饭",
-                    validAnswers: ["喜欢吃", "我喜欢"],
-                    samplePinyin: "Wǒ xǐhuān chī Zhōngguó cài"
-                }
-            ]
+        // LESSON TITLES DATABASE FOR HSK 1 - 4
+        const lessonTitles = {
+            "HSK1": {
+                "1": "Bài 1: 你好 (Xin chào)",
+                "2": "Bài 2: 你叫什么名字？ (Bạn tên là gì?)",
+                "3": "Bài 3: 很高兴认识你 (Rất vui được quen biết bạn)",
+                "4": "Bài 4: 你去哪儿？ (Bạn đi đâu đấy?)",
+                "5": "Bài 5: 你要吃什么？ (Bạn muốn ăn gì?)",
+                "6": "Bài 6: 你在哪儿工作？ (Bạn làm việc ở đâu?)",
+                "7": "Bài 7: 中国银行在哪儿？ (Ngân hàng Trung Quốc ở đâu?)",
+                "8": "Bài 8: 你的生日是几月几号？ (Sinh nhật bạn ngày mấy tháng mấy?)",
+                "9": "Bài 9: 你喜欢中国电影还是美国电影？ (Bạn thích phim TQ hay phim Mỹ?)",
+                "10": "Bài 10: 你家有几口人？ (Nhà bạn có mấy người?)"
+            },
+            "HSK2": {
+                "1": "Bài 1: 你在听什么？ (Bạn đang nghe gì thế?)",
+                "2": "Bài 2: 你篮球打得很好 (Bạn đánh bóng rổ rất giỏi)",
+                "3": "Bài 3: 我想去西安旅游 (Tôi muốn đi du lịch Tây An)",
+                "4": "Bài 4: 你想要哪件？ (Bạn muốn lấy cái nào?)",
+                "5": "Bài 5: 我们爱上中文课 (Chúng tôi thích học tiết tiếng Trung)",
+                "6": "Bài 6: 上个周末你做什么了？ (Cuối tuần trước bạn làm gì?)",
+                "7": "Bài 7: 手机支付真方便。 (Thanh toán qua điện thoại thật tiện lợi)",
+                "8": "Bài 8: 你会做菜吗？ (Bạn biết nấu ăn không?)",
+                "9": "Bài 9: 你见过熊猫吗？ (Bạn từng thấy gấu trúc chưa?)",
+                "10": "Bài 10: 给您添麻烦了 (Đã làm phiền ông/bà rồi)"
+            },
+            "HSK3": {
+                "1": "Bài 1: 我家在农村 (Nhà tôi ở nông thôn)",
+                "2": "Bài 2: 一充值就能打电话 (Vừa nạp tiền là gọi điện được ngay)",
+                "3": "Bài 3: 这要每天吃几次？ (Cái này mỗi ngày phải uống mấy lần?)",
+                "4": "Bài 4: 你们想吃什么就点什么？ (Các bạn muốn ăn gì thì gọi nấy)",
+                "5": "Bài 5: 今天我出院了 (Hôm nay tôi xuất viện rồi)",
+                "6": "Bài 6: (Bài học sắp cập nhật)",
+                "7": "Bài 7: (Bài học sắp cập nhật)",
+                "8": "Bài 8: (Bài học sắp cập nhật)",
+                "9": "Bài 9: (Bài học sắp cập nhật)",
+                "10": "Bài 10: (Bài học sắp cập nhật)"
+            },
+            "HSK4": {
+                "1": "Bài 1: 爱情的模样 (Dáng vẻ của tình yêu)",
+                "2": "Bài 2: 真正的朋友 (Người bạn thực sự)",
+                "3": "Bài 3: (Bài học sắp cập nhật)",
+                "4": "Bài 4: (Bài học sắp cập nhật)",
+                "5": "Bài 5: (Bài học sắp cập nhật)"
+            }
         };
 
+        // LESSON QUESTIONS DATABASE STRUCTURE
+        let lessonsData = {
+            "HSK1": {
+                "1": [
+                    { id: 101, zh: "你好！", pinyin: "Nǐ hǎo!", vi: "Xin chào!", sampleZh: "你好！ / 你好，很高兴认识你。", validAnswers: ["你好", "好"], samplePinyin: "Nǐ hǎo!" },
+                    { id: 102, zh: "你好吗？", pinyin: "Nǐ hǎo ma?", vi: "Bạn có khỏe không?", sampleZh: "我很好，谢谢！", validAnswers: ["好", "很", "谢谢"], samplePinyin: "Wǒ hěn hǎo, xièxie!" }
+                ],
+                "2": [
+                    { id: 201, zh: "你叫什么名字？", pinyin: "Nǐ jiào shénme míngzì?", vi: "Bạn tên là gì?", sampleZh: "我叫王小明。", validAnswers: ["叫", "名字"], samplePinyin: "Wǒ jiào Wáng Xiǎomíng." }
+                ],
+                "3": [
+                    { id: 301, zh: "认识你很高兴！", pinyin: "Rènshi nǐ hěn gāoxìng!", vi: "Rất vui được quen biết bạn!", sampleZh: "认识你我也很高兴！", validAnswers: ["认识", "高兴"], samplePinyin: "Rènshi nǐ wǒ yě hěn gāoxìng!" }
+                ],
+                "4": [
+                    { id: 401, zh: "你去哪儿？", pinyin: "Nǐ qù nǎr?", vi: "Bạn đi đâu đấy?", sampleZh: "我去学校。 / 我回家。", validAnswers: ["去", "学校", "家"], samplePinyin: "Wǒ qù xuéxiào." }
+                ],
+                "5": [
+                    { id: 501, zh: "你要吃什么？", pinyin: "Nǐ yào chī shénme?", vi: "Bạn muốn ăn gì?", sampleZh: "我要吃米饭 / 我要吃包子。", validAnswers: ["吃", "要", "饭"], samplePinyin: "Wǒ yào chī mǐfàn." }
+                ],
+                "6": [
+                    { id: 601, zh: "你在哪儿工作？", pinyin: "Nǐ zài nǎr gōngzuò?", vi: "Bạn làm việc ở đâu?", sampleZh: "我在公司工作。 / 我在医院工作。", validAnswers: ["在", "工作", "公司"], samplePinyin: "Wǒ zài gōngsī gōngzuò." }
+                ],
+                "7": [
+                    { id: 701, zh: "中国银行在哪儿？", pinyin: "Zhōngguó yínháng zài nǎr?", vi: "Ngân hàng Trung Quốc ở đâu?", sampleZh: "在前面 / 在左边。", validAnswers: ["在", "前", "边"], samplePinyin: "Zài qiánmiàn." }
+                ],
+                "8": [
+                    { id: 801, zh: "你的生日是几月几号？", pinyin: "Nǐ de shēngrì shì jǐ yuè jǐ hào?", vi: "Sinh nhật bạn ngày mấy tháng mấy?", sampleZh: "我的生日是五月八号。", validAnswers: ["生日", "月", "号"], samplePinyin: "Wǒ de shēngrì shì wǔ yuè bā hào." }
+                ],
+                "9": [
+                    { id: 901, zh: "你喜欢中国电影还是美国电影？", pinyin: "Nǐ xǐhuān Zhōngguó diànyǐng háishì Měiguó diànyǐng?", vi: "Bạn thích phim Trung Quốc hay phim Mỹ?", sampleZh: "我喜欢中国电影。", validAnswers: ["喜欢", "电影", "中国", "美国"], samplePinyin: "Wǒ xǐhuān Zhōngguó diànyǐng." }
+                ],
+                "10": [
+                    { id: 1001, zh: "你家有几口人？", pinyin: "Nǐ jiā yǒu jǐ kǒu rén?", vi: "Nhà bạn có mấy người?", sampleZh: "我家有四口人。", validAnswers: ["家", "有", "口", "人"], samplePinyin: "Wǒ jiā yǒu sì kǒu rén." }
+                ]
+            },
+            "HSK2": {
+                "1": [
+                    { id: 2101, zh: "你在听什么？", pinyin: "Nǐ zài tīng shénme?", vi: "Bạn đang nghe gì thế?", sampleZh: "我在听音乐。 / 我在听中文歌。", validAnswers: ["听", "音乐", "歌"], samplePinyin: "Wǒ zài tīng yīnyuè." }
+                ],
+                "2": [
+                    { id: 2201, zh: "你篮球打得怎么样？", pinyin: "Nǐ lánqiú dǎ de zěnmeyàng?", vi: "Bạn đánh bóng rổ như thế nào?", sampleZh: "我篮球打得很好。", validAnswers: ["篮球", "打", "好"], samplePinyin: "Wǒ lánqiú dǎ de hěn hǎo." }
+                ],
+                "3": [
+                    { id: 2301, zh: "你想去哪儿旅游？", pinyin: "Nǐ xiǎng qù nǎr lǚyóu?", vi: "Bạn muốn đi đâu du lịch?", sampleZh: "我想去西安旅游。", validAnswers: ["想", "去", "旅游", "西安"], samplePinyin: "Wǒ xiǎng qù Xī'ān lǚyóu." }
+                ],
+                "4": [
+                    { id: 2401, zh: "你想要哪件衣服？", pinyin: "Nǐ xiǎng yào nǎ jiàn yīfu?", vi: "Bạn muốn lấy cái áo nào?", sampleZh: "我要这件红色的。", validAnswers: ["件", "要", "红"], samplePinyin: "Wǒ yào zhè jiàn hóngsè de." }
+                ],
+                "5": [
+                    { id: 2501, zh: "你们喜欢上中文课吗？", pinyin: "Nǐmen xǐhuān shàng Zhōngwén kè ma?", vi: "Các bạn có thích học tiết tiếng Trung không?", sampleZh: "我们非常爱上中文课。", validAnswers: ["爱", "喜欢", "中文", "课"], samplePinyin: "Wǒmen fēicháng ài shàng Zhōngwén kè." }
+                ],
+                "6": [
+                    { id: 2601, zh: "上个周末你做什么了？", pinyin: "Shàng gè zhōumò nǐ zuò shénme le?", vi: "Cuối tuần trước bạn đã làm gì?", sampleZh: "我跟我朋友去逛街了。", validAnswers: ["周末", "做", "去", "朋友"], samplePinyin: "Wǒ gēn wǒ péngyou qù guàngjiē le." }
+                ],
+                "7": [
+                    { id: 2701, zh: "你觉得手机支付方便吗？", pinyin: "Nǐ juéde shǒujī zhīfù fāngbiàn ma?", vi: "Bạn thấy thanh toán qua di động có tiện không?", sampleZh: "手机支付真方便！", validAnswers: ["手机", "支付", "方便"], samplePinyin: "Shǒujī zhīfù zhēn fāngbiàn!" }
+                ],
+                "8": [
+                    { id: 2801, zh: "你会做菜吗？", pinyin: "Nǐ huì zuò cài ma?", vi: "Bạn biết nấu ăn không?", sampleZh: "我会做中国菜。", validAnswers: ["会", "做", "菜"], samplePinyin: "Wǒ huì zuò Zhōngguó cài." }
+                ],
+                "9": [
+                    { id: 2901, zh: "你见过熊猫吗？", pinyin: "Nǐ jiàn guo xióngmāo ma?", vi: "Bạn đã từng nhìn thấy gấu trúc chưa?", sampleZh: "我见过，熊猫非常可爱！", validAnswers: ["见", "过", "熊猫"], samplePinyin: "Wǒ jiàn guo, xióngmāo fēicháng kě'ài!" }
+                ],
+                "10": [
+                    { id: 21001, zh: "真是不好意思，给您添麻烦了。", pinyin: "Zhēn shì bù hǎoyìsi, gěi nín tiān máfan le.", vi: "Thật ngại quá, đã làm phiền ông/bà rồi.", sampleZh: "没关系，不麻烦！", validAnswers: ["没关系", "不", "麻烦"], samplePinyin: "Méi guānxi, bù máfan!" }
+                ]
+            },
+            "HSK3": {
+                "1": [
+                    { id: 3101, zh: "你家在城市还是农村？", pinyin: "Nǐ jiā zài chéngshì háishì nóngcūn?", vi: "Nhà bạn ở thành phố hay nông thôn?", sampleZh: "我家在农村，那里风景很好。", validAnswers: ["家", "农村", "在"], samplePinyin: "Wǒ jiā zài nóngcūn." }
+                ],
+                "2": [
+                    { id: 3201, zh: "怎么才能打电话？", pinyin: "Zěnme cái néng dǎ diànhuà?", vi: "Làm sao mới gọi điện thoại được?", sampleZh: "一充值就能打电话了。", validAnswers: ["充值", "电话", "打"], samplePinyin: "Yī chōngzhí jiù néng dǎ diànhuà." }
+                ],
+                "3": [
+                    { id: 3301, zh: "这个药要怎么吃？", pinyin: "Zhège yào yào zěnme chī?", vi: "Thuốc này phải uống thế nào?", sampleZh: "这要每天吃三次，饭后吃。", validAnswers: ["吃", "次", "每天"], samplePinyin: "Zhè yào měitiān chī sān cì." }
+                ],
+                "4": [
+                    { id: 3401, zh: "今天你想吃什么？", pinyin: "Jīntiān nǐ xiǎng chī shénme?", vi: "Hôm nay bạn muốn ăn gì?", sampleZh: "你们想吃什么就点什么吧！", validAnswers: ["想", "吃", "点"], samplePinyin: "Nǐmen xiǎng chī shénme jiù diǎn shénme ba!" }
+                ],
+                "5": [
+                    { id: 3501, zh: "你的身体怎么样了？", pinyin: "Nǐ de shēntǐ zěnmeyàng le?", vi: "Sức khỏe bạn thế nào rồi?", sampleZh: "谢谢关心，今天我出院了！", validAnswers: ["出院", "好", "身体"], samplePinyin: "Xièxie guānxīn, jīntiān wǒ chūyuàn le!" }
+                ]
+            },
+            "HSK4": {
+                "1": [
+                    { id: 4101, zh: "你觉得什么是爱情？", pinyin: "Nǐ juéde shénme shì àiqíng?", vi: "Bạn nghĩ tình yêu là gì?", sampleZh: "爱情需要互相理解和支持。", validAnswers: ["爱情", "理解", "支持"], samplePinyin: "Àiqíng xūyào hùxiāng lǐjiě hé zhīchí." }
+                ],
+                "2": [
+                    { id: 4201, zh: "什么样的朋友才是真正的朋友？", pinyin: "Shénmeyàng de péngyou cái shì zhēnzhèng de péngyou?", vi: "Người bạn như thế nào mới là bạn thực sự?", sampleZh: "能跟你一起面对困难的朋友才是真正的朋友。", validAnswers: ["朋友", "真正", "困难"], samplePinyin: "Néng gēn nǐ yīqǐ miànduì kùnnán de péngyou cái shì zhēnzhèng de péngyou." }
+                ]
+            }
+        };
+
+        // Current App States
+        let currentHsk = "HSK1";
         let currentLessonId = "1";
         let currentQuestionIdx = 0;
-        let mediaStream = null;
+        let activeQuestionsList = [];
+        let isWebcamActive = false;
         let mediaRecorder = null;
         let recordedChunks = [];
-        let lastRecordedBlob = null;
-        let isRecording = false;
-        let recordTimerInterval = null;
-        let speechRecognition = null;
-        let recognizedText = "";
-        
-        // Track Student Question Results for Report Card
-        let studentAnswersReport = {};
+        let recognition = null;
+        let recordedSpeechText = "";
+        let studentAnswersRecord = {};
 
-        // DOM Ready
         window.onload = function() {
-            renderCurrentQuestion();
+            updateLessonSelectDropdown();
             initSpeechRecognition();
         };
 
+        // DYNAMIC DROPDOWN GENERATOR FOR LESSONS
+        function updateLessonSelectDropdown() {
+            const lessonSelect = document.getElementById('lesson-select');
+            lessonSelect.innerHTML = "";
+
+            const titlesMap = lessonTitles[currentHsk] || {};
+            for (let lId in titlesMap) {
+                let opt = document.createElement('option');
+                opt.value = lId;
+                opt.textContent = titlesMap[lId];
+                lessonSelect.appendChild(opt);
+            }
+
+            // Default selecting lesson 1
+            currentLessonId = "1";
+            loadLessonQuestions();
+        }
+
+        function changeHskLevel(val) {
+            currentHsk = val;
+            updateLessonSelectDropdown();
+        }
+
+        function changeLesson(val) {
+            currentLessonId = val;
+            loadLessonQuestions();
+        }
+
+        function loadLessonQuestions() {
+            if (lessonsData[currentHsk] && lessonsData[currentHsk][currentLessonId]) {
+                activeQuestionsList = lessonsData[currentHsk][currentLessonId];
+            } else {
+                activeQuestionsList = [
+                    { id: 999, zh: "你好！", pinyin: "Nǐ hǎo!", vi: "Xin chào!", sampleZh: "你好！", validAnswers: ["你好"], samplePinyin: "Nǐ hǎo!" }
+                ];
+            }
+            currentQuestionIdx = 0;
+            renderCurrentQuestion();
+            updateReportCard();
+        }
+
+        function renderCurrentQuestion() {
+            const q = activeQuestionsList[currentQuestionIdx];
+            const titleText = lessonTitles[currentHsk]?.[currentLessonId] || `Bài ${currentLessonId}`;
+            
+            document.getElementById('question-index-tag').innerText = `${currentHsk} - ${titleText} - Câu ${currentQuestionIdx + 1} / ${activeQuestionsList.length}`;
+            
+            // Set text (Locked view initially)
+            document.getElementById('display-zh-question').innerText = q.zh;
+            document.getElementById('display-pinyin').innerText = q.pinyin;
+            document.getElementById('display-vi-meaning').innerText = `Dịch: ${q.vi}`;
+
+            document.getElementById('display-sample-answer').innerText = q.sampleZh;
+            document.getElementById('display-sample-pinyin').innerText = q.samplePinyin || "";
+
+            // Lock Question and Sample Box
+            document.getElementById('question-locked-notice').classList.remove('hidden');
+            document.getElementById('question-text-box').classList.add('hidden');
+            
+            document.getElementById('sample-locked-notice').classList.remove('hidden');
+            document.getElementById('sample-text-box').classList.add('hidden');
+
+            document.getElementById('ai-evaluation-box').classList.add('hidden');
+            document.getElementById('recognized-chinese-text').innerText = "...";
+
+            // Update Navigation Buttons
+            document.getElementById('btn-prev-q').disabled = (currentQuestionIdx === 0);
+            document.getElementById('btn-next-q').disabled = (currentQuestionIdx === activeQuestionsList.length - 1);
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIdx > 0) {
+                currentQuestionIdx--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIdx < activeQuestionsList.length - 1) {
+                currentQuestionIdx++;
+                renderCurrentQuestion();
+            }
+        }
+
+        // TEXT TO SPEECH (PROPER NATIVE CHINESE VOICE SELECTION)
+        function speakText(text, lang = 'zh-CN') {
+            if (!('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = lang;
+            utterance.rate = 0.85; // Slightly slower for clear reflex practice
+
+            const voices = window.speechSynthesis.getVoices();
+            const nativeVoice = voices.find(v => v.lang.includes('zh') || v.lang.includes('CN'));
+            if (nativeVoice) utterance.voice = nativeVoice;
+
+            const mouth = document.getElementById('avatar-mouth');
+            const soundwave = document.getElementById('avatar-soundwave');
+            const ring = document.getElementById('avatar-ring');
+
+            utterance.onstart = function() {
+                if (mouth) mouth.setAttribute('d', 'M43 55 Q50 68 57 55'); // Open mouth animation
+                if (soundwave) soundwave.classList.remove('hidden');
+                if (ring) ring.classList.add('avatar-speaking-glow');
+            };
+
+            utterance.onend = function() {
+                if (mouth) mouth.setAttribute('d', 'M43 58 Q50 62 57 58');
+                if (soundwave) soundwave.classList.add('hidden');
+                if (ring) ring.classList.remove('avatar-speaking-glow');
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        function playAIQuestion() {
+            const q = activeQuestionsList[currentQuestionIdx];
+            if (q) speakText(q.zh, 'zh-CN');
+        }
+
+        function playAISampleAnswer() {
+            const q = activeQuestionsList[currentQuestionIdx];
+            if (q) speakText(q.sampleZh, 'zh-CN');
+        }
+
+        // WEBCAM & VIDEO RECORDING
+        async function toggleWebcam() {
+            const webcamVideo = document.getElementById('webcam-preview');
+            const camPlaceholder = document.getElementById('cam-placeholder');
+            const btnRecord = document.getElementById('btn-start-record');
+
+            if (!isWebcamActive) {
+                try {
+                    const stream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    webcamVideo.srcObject = stream;
+                    isWebcamActive = true;
+                    camPlaceholder.classList.add('hidden');
+                    btnRecord.disabled = false;
+                    document.getElementById('btn-toggle-cam').innerHTML = `<i class="fa-solid fa-video-slash mr-1.5 text-rose-400"></i>Tắt Camera`;
+                } catch (err) {
+                    alert("Không thể truy cập Camera/Micro. Vui lòng cấp quyền trình duyệt!");
+                }
+            } else {
+                if (webcamVideo.srcObject) {
+                    webcamVideo.srcObject.getTracks().forEach(track => track.stop());
+                }
+                isWebcamActive = false;
+                camPlaceholder.classList.remove('hidden');
+                btnRecord.disabled = true;
+                document.getElementById('btn-toggle-cam').innerHTML = `<i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera`;
+            }
+        }
+
+        function startVideoRecording() {
+            if (!isWebcamActive) return;
+
+            const countdownOverlay = document.getElementById('countdown-overlay');
+            const countdownNum = document.getElementById('countdown-number');
+            countdownOverlay.classList.remove('hidden');
+            let count = 3;
+            countdownNum.innerText = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNum.innerText = count;
+                } else {
+                    clearInterval(timer);
+                    countdownOverlay.classList.add('hidden');
+                    executeStartRecord();
+                }
+            }, 1000);
+        }
+
+        function executeStartRecord() {
+            const webcamVideo = document.getElementById('webcam-preview');
+            const stream = webcamVideo.srcObject;
+            recordedChunks = [];
+            
+            mediaRecorder = new MediaRecorder(stream);
+            mediaRecorder.ondataavailable = e => { if (e.data.size > 0) recordedChunks.push(e.data); };
+            mediaRecorder.onstop = processRecordedVideo;
+            mediaRecorder.start();
+
+            document.getElementById('recording-timer').classList.remove('hidden');
+            document.getElementById('btn-start-record').classList.add('hidden');
+            document.getElementById('btn-stop-record').classList.remove('hidden');
+
+            // Start Speech STT
+            recordedSpeechText = "";
+            document.getElementById('stt-status').innerText = "Đang lắng nghe giọng bạn...";
+            if (recognition) {
+                try { recognition.start(); } catch(e){}
+            }
+        }
+
+        function stopVideoRecording() {
+            if (mediaRecorder && mediaRecorder.state !== 'inactive') {
+                mediaRecorder.stop();
+            }
+            if (recognition) {
+                try { recognition.stop(); } catch(e){}
+            }
+
+            document.getElementById('recording-timer').classList.add('hidden');
+            document.getElementById('btn-start-record').classList.remove('hidden');
+            document.getElementById('btn-stop-record').classList.add('hidden');
+            document.getElementById('stt-status').innerText = "Đã hoàn thành thu âm";
+        }
+
+        function processRecordedVideo() {
+            const blob = new Blob(recordedChunks, { type: 'video/webm' });
+            const videoURL = URL.createObjectURL(blob);
+            const playback = document.getElementById('recorded-playback');
+            playback.src = videoURL;
+            playback.classList.remove('hidden');
+
+            // Trigger AI Evaluation
+            setTimeout(evaluateAnswerWithAI, 600);
+        }
+
+        // STT SPEECH RECOGNITION INITIALIZATION
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.lang = 'zh-CN';
+                recognition.continuous = true;
+                recognition.interimResults = true;
+
+                recognition.onresult = (event) => {
+                    let finalTranscript = '';
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        if (event.results[i].isFinal) {
+                            finalTranscript += event.results[i][0].transcript;
+                        }
+                    }
+                    if (finalTranscript) {
+                        recordedSpeechText = finalTranscript;
+                        document.getElementById('recognized-chinese-text').innerText = recordedSpeechText;
+                    }
+                };
+            }
+        }
+
+        // AI DIAGNOSTIC EVALUATION ENGINE
+        function evaluateAnswerWithAI() {
+            const q = activeQuestionsList[currentQuestionIdx];
+            const recognized = recordedSpeechText.trim();
+
+            // UNLOCK QUESTION AND SAMPLE ANSWER BOXES NOW THAT STUDENT HAS RECORDED
+            document.getElementById('question-locked-notice').classList.add('hidden');
+            document.getElementById('question-text-box').classList.remove('hidden');
+
+            document.getElementById('sample-locked-notice').classList.add('hidden');
+            document.getElementById('sample-text-box').classList.remove('hidden');
+
+            document.getElementById('ai-evaluation-box').classList.remove('hidden');
+
+            let matchedCount = 0;
+            let missingKeywords = [];
+
+            q.validAnswers.forEach(kw => {
+                if (recognized.includes(kw)) {
+                    matchedCount++;
+                } else {
+                    missingKeywords.push(kw);
+                }
+            });
+
+            let score = 0;
+            if (recognized.length === 0) {
+                score = 0;
+            } else if (matchedCount > 0) {
+                score = Math.min(100, Math.round((matchedCount / q.validAnswers.length) * 100) + 20);
+            } else {
+                score = 40; // Speech detected but keywords missed
+            }
+
+            const scoreCircle = document.getElementById('eval-score-circle');
+            const evalTitle = document.getElementById('eval-title');
+            const evalDesc = document.getElementById('eval-desc');
+            const detailText = document.getElementById('error-breakdown-text');
+
+            scoreCircle.innerText = `${score}%`;
+
+            if (score >= 80) {
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center";
+                evalTitle.innerText = "Chính xác xuất sắc! 🎉";
+                evalTitle.className = "text-xs font-bold text-emerald-400";
+                evalDesc.innerText = "Bạn phát âm chuẩn và đúng từ khóa phản xạ.";
+                detailText.innerHTML = `<span class="text-emerald-400 font-bold">✓ Đã nói:</span> "${recognized || q.sampleZh}"<br><span class="text-slate-400">Phát âm tốt, đúng cấu trúc mẫu.</span>`;
+            } else if (score >= 40) {
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-lg flex items-center justify-center";
+                evalTitle.innerText = "Cần cải thiện từ khóa / Phát âm ⚠️";
+                evalTitle.className = "text-xs font-bold text-amber-400";
+                evalDesc.innerText = "Chưa phát âm đủ các từ chìa khóa chính.";
+                detailText.innerHTML = `<span class="text-amber-300 font-bold">⚠️ AI ghi nhận:</span> "${recognized || 'Ngập ngừng'}"<br><span class="text-rose-400 font-bold">❌ Từ thiếu/phát âm sai:</span> ${missingKeywords.join(', ') || 'Chưa rõ'}<br><span class="text-indigo-300">💡 Gợi ý: Hãy bấm nghe đáp án mẫu ở trên và thử luyện lại!</span>`;
+            } else {
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-lg flex items-center justify-center";
+                evalTitle.innerText = "Chưa ghi nhận câu trả lời ❌";
+                evalTitle.className = "text-xs font-bold text-rose-400";
+                evalDesc.innerText = "Micro chưa thu được giọng nói hoặc nói quá nhỏ.";
+                detailText.innerHTML = `<span class="text-rose-400">Vui lòng bật Micro nói to, rõ ràng hơn để AI phân tích.</span>`;
+            }
+
+            // Temporarily store score for student report
+            studentAnswersRecord[`${currentHsk}_${currentLessonId}_${currentQuestionIdx}`] = {
+                questionZh: q.zh,
+                studentText: recognized || "Chưa phát âm",
+                score: score,
+                status: score >= 70 ? 'correct' : 'incorrect',
+                analysis: detailText.innerHTML
+            };
+
+            updateReportCard();
+        }
+
+        function saveCurrentQuestionResult() {
+            alert(`Đã lưu kết quả câu ${currentQuestionIdx + 1} vào Bảng Báo Cáo Bài Làm!`);
+        }
+
+        // UPDATE REPORT CARD FOR SUBMISSION
+        function updateReportCard() {
+            const studentName = document.getElementById('student-name-input').value || "Học sinh";
+            const lessonTitle = lessonTitles[currentHsk]?.[currentLessonId] || `Bài ${currentLessonId}`;
+            
+            document.getElementById('report-student-name').innerText = `Họ tên học sinh: ${studentName}`;
+            document.getElementById('report-lesson-name').innerText = `Cấp độ: ${currentHsk} - Bài làm: ${lessonTitle}`;
+
+            const container = document.getElementById('report-questions-list');
+            container.innerHTML = "";
+
+            let totalScoreSum = 0;
+            let answeredCount = 0;
+
+            activeQuestionsList.forEach((q, idx) => {
+                const key = `${currentHsk}_${currentLessonId}_${idx}`;
+                const rec = studentAnswersRecord[key];
+
+                const qCard = document.createElement('div');
+                qCard.className = "p-3.5 rounded-xl border text-xs space-y-1.5 transition-all";
+
+                if (rec) {
+                    answeredCount++;
+                    totalScoreSum += rec.score;
+
+                    if (rec.status === 'correct') {
+                        qCard.className += " bg-emerald-950/40 border-emerald-500/50 text-emerald-200";
+                        qCard.innerHTML = `
+                            <div class="flex items-center justify-between font-bold">
+                                <span>Câu ${idx + 1}: ${q.zh}</span>
+                                <span class="px-2 py-0.5 rounded bg-emerald-500/20 text-emerald-400 border border-emerald-500/30">✓ ĐÚNG (${rec.score}%)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300">Học sinh nói: <span class="font-zh font-bold text-emerald-300">"${rec.studentText}"</span></p>
+                        `;
+                    } else {
+                        qCard.className += " bg-rose-950/40 border-rose-500/50 text-rose-200";
+                        qCard.innerHTML = `
+                            <div class="flex items-center justify-between font-bold">
+                                <span>Câu ${idx + 1}: ${q.zh}</span>
+                                <span class="px-2 py-0.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">❌ SAI (${rec.score}%)</span>
+                            </div>
+                            <p class="text-[11px] text-slate-300">Học sinh nói: <span class="font-zh font-bold text-rose-300">"${rec.studentText}"</span></p>
+                            <div class="text-[10px] bg-slate-950/80 p-2 rounded border border-slate-800 text-slate-300">
+                                ${rec.analysis}
+                            </div>
+                        `;
+                    }
+                } else {
+                    qCard.className += " bg-slate-950/60 border-slate-800 text-slate-400";
+                    qCard.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span>Câu ${idx + 1}: [Khóa phản xạ nghe]</span>
+                            <span class="text-[10px] text-slate-500 italic">Chưa làm bài</span>
+                        </div>
+                    `;
+                }
+                container.appendChild(qCard);
+            });
+
+            const avgScore = answeredCount > 0 ? Math.round(totalScoreSum / answeredCount) : 0;
+            document.getElementById('report-total-score').innerText = `${avgScore}%`;
+        }
+
+        // ROLE SWITCHER (STUDENT / TEACHER)
         function switchRole(role) {
             const studentView = document.getElementById('student-view');
             const teacherView = document.getElementById('teacher-view');
@@ -505,431 +996,32 @@
             }
         }
 
-        function changeLesson(lessonId) {
-            currentLessonId = lessonId;
-            currentQuestionIdx = 0;
-            studentAnswersReport = {}; 
-            renderCurrentQuestion();
-            updateReportCard();
-        }
-
-        function getCurrentQuestionsList() {
-            return lessonsData[currentLessonId] || [];
-        }
-
-        function renderCurrentQuestion() {
-            const currentQuestions = getCurrentQuestionsList();
-            if (currentQuestions.length === 0) return;
-
-            const q = currentQuestions[currentQuestionIdx];
-            document.getElementById('question-index-tag').innerText = `Bài ${currentLessonId} - Câu ${currentQuestionIdx + 1} / ${currentQuestions.length}`;
-            document.getElementById('display-zh-question').innerText = q.zh;
-            document.getElementById('display-pinyin').innerText = q.pinyin;
-            document.getElementById('display-vi-meaning').innerText = `Dịch: ${q.vi}`;
-            document.getElementById('display-sample-answer').innerText = q.sampleZh;
-            document.getElementById('display-sample-pinyin').innerText = q.samplePinyin || "";
-            
-            // ENSURE LOCKED STATE ON QUESTION & SAMPLE BEFORE ANSWERING
-            document.getElementById('question-locked-notice').classList.remove('hidden');
-            document.getElementById('question-text-box').classList.add('hidden');
-            document.getElementById('sample-locked-notice').classList.remove('hidden');
-            document.getElementById('sample-text-box').classList.add('hidden');
-
-            // Reset STT & Evaluation
-            document.getElementById('recognized-chinese-text').innerText = "...";
-            document.getElementById('ai-evaluation-box').classList.add('hidden');
-
-            // Check if retried question already exists
-            const rep = studentAnswersReport[q.id];
-            if (rep) {
-                document.getElementById('btn-record-label').innerText = "Thực Hành Nói Lại (Quay Lại)";
-            } else {
-                document.getElementById('btn-record-label').innerText = "Quay Video & Nói";
-            }
-        }
-
-        function prevQuestion() {
-            if (currentQuestionIdx > 0) {
-                currentQuestionIdx--;
-                renderCurrentQuestion();
-            }
-        }
-
-        function nextQuestion() {
-            const currentQuestions = getCurrentQuestionsList();
-            if (currentQuestionIdx < currentQuestions.length - 1) {
-                currentQuestionIdx++;
-                renderCurrentQuestion();
-            }
-        }
-
-        function playAIQuestion() {
-            const currentQuestions = getCurrentQuestionsList();
-            const q = currentQuestions[currentQuestionIdx];
-            if (q) speakChinese(q.zh);
-        }
-
-        function playAISampleAnswer() {
-            const currentQuestions = getCurrentQuestionsList();
-            const q = currentQuestions[currentQuestionIdx];
-            if (q) speakChinese(q.sampleZh);
-        }
-
-        function speakChinese(text) {
-            if (!('speechSynthesis' in window)) return;
-
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'zh-CN';
-            utterance.rate = 0.85;
-
-            const avatarContainer = document.getElementById('avatar-container');
-            const soundwave = document.getElementById('avatar-soundwave');
-            const mouth = document.getElementById('avatar-mouth');
-
-            utterance.onstart = () => {
-                avatarContainer.classList.add('avatar-speaking-glow');
-                soundwave.classList.remove('hidden');
-                mouth.setAttribute('d', 'M43 55 Q50 68 57 55');
-            };
-
-            utterance.onend = () => {
-                avatarContainer.classList.remove('avatar-speaking-glow');
-                soundwave.classList.add('hidden');
-                mouth.setAttribute('d', 'M43 58 Q50 62 57 58');
-            };
-
-            window.speechSynthesis.speak(utterance);
-        }
-
-        // Camera Management
-        async function toggleWebcam() {
-            const videoElem = document.getElementById('webcam-preview');
-            const placeholder = document.getElementById('cam-placeholder');
-            const btnCam = document.getElementById('btn-toggle-cam');
-            const btnRecord = document.getElementById('btn-start-record');
-            const statusText = document.getElementById('cam-status-text');
-            const statusSubtext = document.getElementById('cam-status-subtext');
-
-            if (mediaStream) {
-                mediaStream.getTracks().forEach(track => track.stop());
-                mediaStream = null;
-                videoElem.srcObject = null;
-                placeholder.classList.remove('hidden');
-                btnCam.innerHTML = `<i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera`;
-                btnRecord.disabled = true;
-                statusText.innerText = "Camera chưa được bật.";
-                statusSubtext.innerText = 'Nhấn "Bật Camera" bên dưới để bắt đầu quay bài làm.';
-            } else {
-                try {
-                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
-                    videoElem.srcObject = mediaStream;
-                    placeholder.classList.add('hidden');
-                    btnCam.innerHTML = `<i class="fa-solid fa-video-slash mr-1.5 text-rose-400"></i>Tắt Camera`;
-                    btnRecord.disabled = false;
-                } catch (err) {
-                    placeholder.classList.remove('hidden');
-                    statusText.innerText = "Không thể truy cập Camera!";
-                    statusSubtext.innerText = "Bạn cần nhấn 'Cho Phép' (Allow) khi trình duyệt hỏi quyền truy cập Camera/Micro.";
-                }
-            }
-        }
-
-        function startVideoRecording() {
-            const countdownOverlay = document.getElementById('countdown-overlay');
-            const countdownNumber = document.getElementById('countdown-number');
-            
-            countdownOverlay.classList.remove('hidden');
-            let count = 3;
-            countdownNumber.innerText = count;
-
-            const timer = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    countdownNumber.innerText = count;
-                } else {
-                    clearInterval(timer);
-                    countdownOverlay.classList.add('hidden');
-                    executeRecordingStart();
-                }
-            }, 1000);
-        }
-
-        function executeRecordingStart() {
-            recordedChunks = [];
-            try {
-                mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm' });
-            } catch (e) {
-                mediaRecorder = new MediaRecorder(mediaStream);
-            }
-
-            mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) recordedChunks.push(event.data);
-            };
-
-            mediaRecorder.onstop = () => {
-                lastRecordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
-                const videoURL = URL.createObjectURL(lastRecordedBlob);
-                const playback = document.getElementById('recorded-playback');
-                playback.src = videoURL;
-                playback.classList.remove('hidden');
-                document.getElementById('webcam-preview').classList.add('hidden');
-            };
-
-            mediaRecorder.start();
-            isRecording = true;
-
-            document.getElementById('btn-start-record').classList.add('hidden');
-            document.getElementById('btn-stop-record').classList.remove('hidden');
-            document.getElementById('recording-timer').classList.remove('hidden');
-
-            let seconds = 0;
-            recordTimerInterval = setInterval(() => {
-                seconds++;
-                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-                const secs = String(seconds % 60).padStart(2, '0');
-                document.getElementById('recording-timer').innerText = `● REC ${mins}:${secs}`;
-            }, 1000);
-
-            startSTT();
-        }
-
-        function stopVideoRecording() {
-            if (mediaRecorder && isRecording) {
-                mediaRecorder.stop();
-                isRecording = false;
-                clearInterval(recordTimerInterval);
-
-                document.getElementById('btn-start-record').classList.remove('hidden');
-                document.getElementById('btn-stop-record').classList.add('hidden');
-                document.getElementById('recording-timer').classList.add('hidden');
-
-                stopSTT();
-            }
-        }
-
-        // Speech Recognition Engine
-        function initSpeechRecognition() {
-            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (SpeechRecognition) {
-                speechRecognition = new SpeechRecognition();
-                speechRecognition.continuous = true;
-                speechRecognition.interimResults = true;
-                speechRecognition.lang = 'zh-CN';
-
-                speechRecognition.onresult = (event) => {
-                    let transcript = '';
-                    for (let i = event.resultIndex; i < event.results.length; i++) {
-                        transcript += event.results[i][0].transcript;
-                    }
-                    recognizedText = transcript;
-                    document.getElementById('recognized-chinese-text').innerText = transcript || "...";
-                };
-
-                speechRecognition.onend = () => {
-                    document.getElementById('stt-status').innerText = "Đã hoàn thành nhận diện";
-                    evaluateAnswerWithDetailedAnalysis();
-                };
-            }
-        }
-
-        function startSTT() {
-            if (speechRecognition) {
-                recognizedText = "";
-                document.getElementById('recognized-chinese-text').innerText = "Đang nghe học sinh phát âm...";
-                document.getElementById('stt-status').innerText = "Đang nhận diện giọng nói...";
-                try { speechRecognition.start(); } catch(e) {}
-            }
-        }
-
-        function stopSTT() {
-            if (speechRecognition) {
-                try { speechRecognition.stop(); } catch(e) {}
-            }
-        }
-
-        // ADVANCED AI EVALUATION & DETAILED ERROR DIAGNOSIS
-        function evaluateAnswerWithDetailedAnalysis() {
-            const currentQuestions = getCurrentQuestionsList();
-            const currentQ = currentQuestions[currentQuestionIdx];
-            if (!currentQ) return;
-
-            // UNLOCK QUESTION & SAMPLE TEXT AFTER SUBMISSION
-            document.getElementById('question-locked-notice').classList.add('hidden');
-            document.getElementById('question-text-box').classList.remove('hidden');
-            document.getElementById('sample-locked-notice').classList.add('hidden');
-            document.getElementById('sample-text-box').classList.remove('hidden');
-
-            let score = 0;
-            const targetSample = currentQ.sampleZh;
-            const validKeywords = currentQ.validAnswers || [targetSample];
-
-            let errorHtml = "";
-            let isPassed = false;
-
-            if (recognizedText && recognizedText.trim().length > 0) {
-                const cleanInput = recognizedText.replace(/[.,?!，。？！]/g, '').trim();
-
-                let matchedKeyword = false;
-                for (let keyword of validKeywords) {
-                    if (cleanInput.includes(keyword)) {
-                        matchedKeyword = true;
-                        break;
-                    }
-                }
-
-                let matches = 0;
-                let missingChars = [];
-                for (let char of targetSample.replace(/[.,?!，。？！ /]/g, '')) {
-                    if (cleanInput.includes(char)) {
-                        matches++;
-                    } else {
-                        missingChars.push(char);
-                    }
-                }
-                let charScore = Math.round((matches / Math.max(targetSample.length, 1)) * 100);
-
-                if (matchedKeyword) {
-                    score = Math.max(90, charScore);
-                    isPassed = true;
-                    errorHtml = `<p class="text-emerald-400 font-bold">✓ Chính xác! Trả lời đúng cấu trúc & từ khóa cốt lõi.</p>`;
-                } else if (charScore >= 50) {
-                    score = Math.max(75, charScore);
-                    isPassed = true;
-                    errorHtml = `<p class="text-amber-400 font-bold">⚠ Đúng ý nhưng phát âm chưa chuẩn hoặc thiếu chữ:</p>
-                                 <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
-                                 <p>Từ phát âm chưa chuẩn/thiếu: <span class="text-rose-400 font-bold">${missingChars.join(', ') || 'Chưa rõ'}</span></p>`;
-                } else {
-                    score = Math.min(45, charScore);
-                    isPassed = false;
-                    errorHtml = `<p class="text-rose-400 font-bold">❌ Sai ngữ pháp / Lạc đề / Phát âm ngọng:</p>
-                                 <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
-                                 <p>Gợi ý đáp án đúng: <span class="text-cyan-300 font-bold">${targetSample}</span></p>`;
-                }
-            } else {
-                score = 0;
-                isPassed = false;
-                errorHtml = `<p class="text-rose-400 font-bold">❌ Không nghe thấy giọng nói của học sinh (Chưa phát âm).</p>`;
-            }
-
-            const evalBox = document.getElementById('ai-evaluation-box');
-            const scoreCircle = document.getElementById('eval-score-circle');
-            const evalTitle = document.getElementById('eval-title');
-            const evalDesc = document.getElementById('eval-desc');
-            const breakdownText = document.getElementById('error-breakdown-text');
-
-            evalBox.classList.remove('hidden');
-            scoreCircle.innerText = `${score}%`;
-            breakdownText.innerHTML = errorHtml;
-
-            if (score >= 80) {
-                evalTitle.innerText = "Xuất sắc! Trả lời & Phát âm rất chuẩn";
-                evalDesc.innerText = "AI đánh giá câu trả lời hợp lệ 100%.";
-                scoreCircle.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center";
-            } else if (score >= 50) {
-                evalTitle.innerText = "Khá tốt! Cần luyện lại phát âm";
-                evalDesc.innerText = "Có thể bấm Quay lại để luyện lại câu này.";
-                scoreCircle.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-lg flex items-center justify-center";
-            } else {
-                evalTitle.innerText = "Chưa đạt! Cần quay làm lại câu này";
-                evalDesc.innerText = "Hãy nghe kỹ lại câu hỏi và bấm Quay video làm lại.";
-                scoreCircle.className = "w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-lg flex items-center justify-center";
-            }
-
-            // Save result immediately to student report
-            saveCurrentQuestionResult(score, errorHtml, isPassed);
-        }
-
-        function saveCurrentQuestionResult(scoreVal, errorHtmlVal, isPassed) {
-            const currentQuestions = getCurrentQuestionsList();
-            const q = currentQuestions[currentQuestionIdx];
-            const scoreStr = document.getElementById('eval-score-circle').innerText;
-            const numScore = parseInt(scoreStr) || 0;
-
-            studentAnswersReport[q.id] = {
-                questionZh: q.zh,
-                studentSpoke: recognizedText || "Chưa phát âm",
-                score: scoreStr,
-                numericScore: numScore,
-                isCorrect: numScore >= 50,
-                errorDetail: document.getElementById('error-breakdown-text').innerHTML
-            };
-
-            updateReportCard();
-        }
-
-        function updateReportCard() {
-            const studentName = document.getElementById('student-name-input').value || "Nguyễn Văn A";
-            document.getElementById('report-student-name').innerText = `Họ tên: ${studentName}`;
-            document.getElementById('report-lesson-name').innerText = `Bài làm: Bài ${currentLessonId}`;
-
-            const container = document.getElementById('report-questions-list');
-            container.innerHTML = "";
-
-            const currentQuestions = getCurrentQuestionsList();
-            let totalScoresSum = 0;
-            let answeredCount = 0;
-
-            currentQuestions.forEach((q, idx) => {
-                const rep = studentAnswersReport[q.id];
-                const card = document.createElement('div');
-
-                if (rep) {
-                    totalScoresSum += rep.numericScore;
-                    answeredCount++;
-                    
-                    const isGreen = rep.numericScore >= 50;
-                    card.className = `p-3.5 rounded-xl border space-y-1 text-xs ${isGreen ? 'bg-emerald-950/40 border-emerald-500/40' : 'bg-rose-950/40 border-rose-500/40'}`;
-
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold ${isGreen ? 'text-emerald-300' : 'text-rose-300'}">Câu ${idx + 1}: [Nội dung đã được kiểm tra]</span>
-                            <span class="px-2 py-0.5 rounded text-[11px] font-black ${isGreen ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
-                                ${isGreen ? '✓ ĐÚNG' : '❌ SAI'} (${rep.score})
-                            </span>
-                        </div>
-                        <p class="text-slate-300">Học sinh đã trả lời: <strong class="text-amber-300 font-zh">${rep.studentSpoke}</strong></p>
-                        <div class="text-[11px] mt-1 pt-1 border-t border-slate-800/80">${rep.errorDetail}</div>
-                    `;
-                } else {
-                    card.className = "bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1 text-xs";
-                    card.innerHTML = `
-                        <div class="flex items-center justify-between">
-                            <span class="font-bold text-slate-400">Câu ${idx + 1}</span>
-                            <span class="text-slate-600 font-bold">Chưa làm</span>
-                        </div>
-                    `;
-                }
-                container.appendChild(card);
-            });
-
-            const avgScore = answeredCount > 0 ? Math.round(totalScoresSum / currentQuestions.length) : 0;
-            document.getElementById('report-total-score').innerText = `${avgScore}%`;
-        }
-
+        // TEACHER: ADD NEW QUESTION
         function addNewQuestion(e) {
             e.preventDefault();
-            const targetLessonId = document.getElementById('input-new-lesson-id').value;
+            const lessonId = document.getElementById('input-new-lesson-id').value;
+            const zh = document.getElementById('input-new-zh').value;
+            const pinyin = document.getElementById('input-new-pinyin').value;
+            const vi = document.getElementById('input-new-vi').value;
+            const sample = document.getElementById('input-new-sample').value;
+
+            if (!lessonsData[currentHsk]) lessonsData[currentHsk] = {};
+            if (!lessonsData[currentHsk][lessonId]) lessonsData[currentHsk][lessonId] = [];
+
             const newQ = {
                 id: Date.now(),
-                zh: document.getElementById('input-new-zh').value,
-                pinyin: document.getElementById('input-new-pinyin').value,
-                vi: document.getElementById('input-new-vi').value,
-                sampleZh: document.getElementById('input-new-sample').value,
-                validAnswers: document.getElementById('input-new-sample').value.split('/'),
+                zh: zh,
+                pinyin: pinyin,
+                vi: vi,
+                sampleZh: sample,
+                validAnswers: sample.split('/')[0].trim().split(''),
                 samplePinyin: ""
             };
 
-            if (!lessonsData[targetLessonId]) {
-                lessonsData[targetLessonId] = [];
-            }
-            lessonsData[targetLessonId].push(newQ);
-
-            alert(`✅ Đã thêm câu hỏi mới vào Bài ${targetLessonId}!`);
+            lessonsData[currentHsk][lessonId].push(newQ);
+            alert(`Đã thêm câu hỏi thành công vào ${currentHsk} - Bài ${lessonId}!`);
             e.target.reset();
-            
-            document.getElementById('lesson-select').value = targetLessonId;
-            changeLesson(targetLessonId);
+            loadLessonQuestions();
         }
     </script>
 </body>
