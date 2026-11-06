@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MandarinVoice AI - Avatar & Video Interactive</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ai: {
+                            50: '#f0f5ff',
+                            500: '#6366f1',
+                            600: '#4f46e5',
+                            700: '#4338ca',
+                            cyan: '#06b6d4',
+                            magenta: '#d946ef'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        zh: ['"Noto Sans SC"', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .cyber-glow {
+            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
+        }
+        .avatar-speaking-glow {
+            box-shadow: 0 0 35px 5px rgba(6, 182, 212, 0.6);
+            border-color: #06b6d4 !important;
+        }
+        .wave-bar {
+            animation: soundwave 1.2s ease-in-out infinite alternate;
+        }
+        .wave-bar:nth-child(1) { animation-delay: 0.1s; }
+        .wave-bar:nth-child(2) { animation-delay: 0.3s; }
+        .wave-bar:nth-child(3) { animation-delay: 0.2s; }
+        .wave-bar:nth-child(4) { animation-delay: 0.5s; }
+        .wave-bar:nth-child(5) { animation-delay: 0.4s; }
+
+        @keyframes soundwave {
+            0% { height: 6px; }
+            100% { height: 32px; }
+        }
+
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 5px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(241, 245, 249, 0.5);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
+
+    <!-- PASSWORD MODAL -->
+    <div id="password-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full shadow-2xl text-center space-y-5">
+            <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-cyan-400 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/30">
+                <i class="fa-solid fa-lock text-slate-950 text-2xl"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-bold text-white">Lớp Học Tiếng Trung Chuyên Biệt</h2>
+                <p class="text-xs text-slate-400 mt-1">Trang web này chỉ dành riêng cho học sinh được Giáo viên cấp quyền. Vui lòng nhập mật khẩu lớp học để tiếp tục.</p>
+            </div>
+            
+            <form onsubmit="verifyClassPassword(event)" class="space-y-4">
+                <div>
+                    <input type="password" id="input-class-password" placeholder="Nhập mật khẩu lớp học..." class="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-center text-cyan-400 font-bold focus:outline-none focus:border-cyan-400 tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-600">
+                    <p id="password-error" class="hidden text-xs text-rose-500 mt-2 font-medium">⚠️ Mật khẩu không đúng! Vui lòng hỏi Giáo viên.</p>
+                </div>
+                <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2">
+                    <i class="fa-solid fa-key"></i>
+                    <span>Xác Nhận Vào Học</span>
+                </button>
+            </form>
+            <p class="text-[11px] text-slate-500">Mật khẩu mặc định: <code class="text-indigo-400 font-mono">666666</code></p>
+        </div>
+    </div>
+
+    <script>
+        const CLASS_PASSWORD = "666666"; 
+
+        function verifyClassPassword(e) {
+            e.preventDefault();
+            const inputPwd = document.getElementById('input-class-password').value;
+            const errorMsg = document.getElementById('password-error');
+            
+            if (inputPwd === CLASS_PASSWORD) {
+                document.getElementById('password-overlay').classList.add('hidden');
+            } else {
+                errorMsg.classList.remove('hidden');
+            }
+        }
+    </script>
+
+    <!-- Header Navigation -->
+    <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-500 via-purple-500 to-cyan-400 p-0.5 flex items-center justify-center shadow-lg">
+                    <div class="w-full h-full bg-slate-950 rounded-[10px] flex items-center justify-center">
+                        <i class="fa-solid fa-robot text-cyan-400 text-lg"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="flex items-center space-x-2">
+                        <span class="text-xl font-extrabold bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">MandarinAI</span>
+                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-cyan-400 border border-indigo-500/30">AVATAR 3D & CAMERA</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Role & Controls -->
+            <div class="flex items-center space-x-3">
+                <div class="bg-slate-800/80 p-1 rounded-xl flex items-center border border-slate-700">
+                    <button id="btn-role-student" onclick="switchRole('student')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md">
+                        <i class="fa-solid fa-video mr-1.5"></i>Học Sinh Luyện Nói
+                    </button>
+                    <button id="btn-role-teacher" onclick="switchRole('teacher')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200">
+                        <i class="fa-solid fa-user-gear mr-1.5"></i>Giáo Viên
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+
+        <!-- STUDENT VIEW -->
+        <section id="student-view" class="space-y-6">
+            <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center space-x-3">
+                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></div>
+                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Trạng thái phòng: <span class="text-emerald-400">Sẵn sàng thu âm & camera</span></span>
+                </div>
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <label for="student-name-input" class="text-xs font-medium text-slate-300 whitespace-nowrap">Họ tên học sinh:</label>
+                    <input type="text" id="student-name-input" value="Học sinh Nguyễn Văn A" placeholder="Nhập tên..." class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-56">
+                </div>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
+
+                <!-- LEFT COLUMN: AI TEACHER AVATAR -->
+                <div class="flex flex-col h-full">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow relative overflow-hidden">
+                        
+                        <div class="absolute -top-12 -left-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
+                        <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                        <div>
+                            <div class="flex items-center justify-between mb-4">
+                                <span id="question-index-tag" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
+                                    Câu 1 / 3
+                                </span>
+                                <span class="text-[11px] text-slate-400 flex items-center">
+                                    <i class="fa-solid fa-sparkles text-amber-400 mr-1.5"></i>Giáo viên AI: Cô Lý (Li Laoshi)
+                                </span>
+                            </div>
+
+                            <div class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 p-5 flex flex-col items-center justify-center my-2 transition-all duration-300" id="avatar-container">
+                                <div id="avatar-soundwave" class="hidden absolute top-4 right-4 flex items-end space-x-1 h-8">
+                                    <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
+                                    <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
+                                    <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
+                                    <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
+                                    <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
+                                </div>
+
+                                <div class="relative w-36 h-36 sm:w-40 sm:h-40 my-2">
+                                    <div id="avatar-ring" class="absolute inset-0 rounded-full border-2 border-dashed border-cyan-500/40 animate-spin" style="animation-duration: 15s;"></div>
+                                    
+                                    <div class="w-full h-full rounded-full bg-gradient-to-b from-slate-800 to-indigo-950 p-2 flex items-center justify-center shadow-inner overflow-hidden border border-slate-700">
+                                        <svg id="teacher-avatar-svg" class="w-32 h-32 text-cyan-400 transition-transform duration-200" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M50 15C33 15 22 27 22 45C22 55 27 63 32 70L50 82L68 70C73 63 78 55 78 45C78 27 67 15 50 15Z" fill="#1e1b4b" stroke="#6366f1" stroke-width="2"/>
+                                            <path d="M30 42C30 32 38 26 50 26C62 26 70 32 70 42C70 58 64 68 50 72C36 68 30 58 30 42Z" fill="#fde047"/>
+                                            <circle cx="41" cy="44" r="4" fill="#0f172a" />
+                                            <circle cx="59" cy="44" r="4" fill="#0f172a" />
+                                            <circle cx="42" cy="43" r="1.5" fill="white" />
+                                            <circle cx="60" cy="43" r="1.5" fill="white" />
+                                            <circle cx="41" cy="44" r="7" stroke="#06b6d4" stroke-width="2" />
+                                            <circle cx="59" cy="44" r="7" stroke="#06b6d4" stroke-width="2" />
+                                            <line x1="48" y1="44" x2="52" y2="44" stroke="#06b6d4" stroke-width="2" />
+                                            <path id="avatar-mouth" d="M43 58 Q50 62 57 58" stroke="#dc2626" stroke-width="3" stroke-linecap="round" fill="none" />
+                                        </svg>
+                                    </div>
+                                </div>
+
+                                <div class="mt-2 text-center">
+                                    <button onclick="playAIQuestion()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white rounded-xl font-medium text-xs shadow-lg transition-all flex items-center space-x-2">
+                                        <i class="fa-solid fa-volume-high text-cyan-200"></i>
+                                        <span>AI Đọc câu hỏi (Giọng tự nhiên)</span>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 my-3 space-y-2">
+                                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Câu hỏi tiếng Trung:</span>
+                                <h2 id="display-zh-question" class="text-2xl font-bold font-zh text-white tracking-wide">
+                                    你叫什么名字？
+                                </h2>
+                                <p id="display-pinyin" class="text-sm font-semibold text-cyan-400">
+                                    Nǐ jiào shénme míngzì?
+                                </p>
+                                <p id="display-vi-meaning" class="text-xs text-slate-400 italic">
+                                    Dịch: Tên của bạn là gì?
+                                </p>
+                            </div>
+
+                            <div class="bg-indigo-950/40 border border-indigo-900/60 rounded-xl p-3.5 text-xs">
+                                <div class="flex items-center justify-between mb-1">
+                                    <span class="font-bold text-indigo-300 uppercase tracking-wide text-[10px]">
+                                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i>Gợi ý câu trả lời mẫu:
+                                    </span>
+                                    <button onclick="playAISampleAnswer()" class="text-[11px] text-cyan-400 hover:underline">
+                                        <i class="fa-solid fa-play mr-1"></i>Nghe mẫu
+                                    </button>
+                                </div>
+                                <p id="display-sample-answer" class="font-zh font-bold text-slate-200 text-sm">
+                                    我叫李华。
+                                </p>
+                                <p id="display-sample-pinyin" class="text-slate-400 text-[11px]">
+                                    Wǒ jiào Lǐ Huá.
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-4 border-t border-slate-800 mt-4">
+                            <button id="btn-prev-q" onclick="prevQuestion()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition-colors">
+                                <i class="fa-solid fa-chevron-left mr-1"></i> Câu trước
+                            </button>
+                            <button id="btn-next-q" onclick="nextQuestion()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition-colors">
+                                Câu tiếp <i class="fa-solid fa-chevron-right ml-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- RIGHT COLUMN: STUDENT WEBCAM VIDEO RECORDER -->
+                <div class="flex flex-col h-full">
+                    <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow">
+                        <div>
+                            <div class="flex items-center justify-between mb-3">
+                                <span class="text-xs font-bold text-slate-300 flex items-center">
+                                    <i class="fa-solid fa-video text-rose-500 mr-2"></i>Màn hình Camera Học sinh trả lời
+                                </span>
+                                <div id="recording-timer" class="hidden px-2.5 py-1 bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-mono font-bold rounded-md animate-pulse">
+                                    ● REC 00:00
+                                </div>
+                            </div>
+
+                            <div class="relative bg-slate-950 border-2 border-slate-800 rounded-2xl overflow-hidden aspect-video flex items-center justify-center">
+                                <video id="webcam-preview" autoplay playsinline muted class="w-full h-full object-cover"></video>
+                                <video id="recorded-playback" controls class="w-full h-full object-cover hidden"></video>
+
+                                <div id="cam-placeholder" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center text-slate-500 p-4 text-center">
+                                    <i class="fa-solid fa-camera-retro text-4xl mb-2 text-slate-600"></i>
+                                    <p id="cam-status-text" class="text-xs">Camera chưa được bật.</p>
+                                    <p id="cam-status-subtext" class="text-[10px] text-slate-600 mt-1">Nhấn "Bật Camera" bên dưới để bắt đầu quay bài làm.</p>
+                                </div>
+
+                                <div id="countdown-overlay" class="hidden absolute inset-0 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center z-10">
+                                    <span id="countdown-number" class="text-7xl font-extrabold text-cyan-400 animate-bounce">3</span>
+                                </div>
+                            </div>
+
+                            <div class="flex flex-wrap items-center justify-between gap-2 mt-4">
+                                <button id="btn-toggle-cam" onclick="toggleWebcam()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition-all border border-slate-700">
+                                    <i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera
+                                </button>
+
+                                <div class="flex items-center space-x-2">
+                                    <button id="btn-start-record" onclick="startVideoRecording()" disabled class="px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-800 disabled:text-slate-600 text-white text-xs font-bold rounded-xl transition-all shadow-lg flex items-center">
+                                        <i class="fa-solid fa-circle mr-1.5 text-xs animate-pulse"></i>Quay Video & Nói
+                                    </button>
+
+                                    <button id="btn-stop-record" onclick="stopVideoRecording()" class="hidden px-4 py-2 bg-slate-800 hover:bg-slate-700 text-rose-400 border border-rose-500/40 text-xs font-bold rounded-xl transition-all">
+                                        <i class="fa-solid fa-square mr-1.5"></i>Dừng Quay
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="space-y-3 mt-4 pt-4 border-t border-slate-800">
+                            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                                <div class="flex items-center justify-between text-[11px] text-slate-400">
+                                    <span>AI Nhận diện giọng nói (Speech-to-Text):</span>
+                                    <span id="stt-status" class="text-cyan-400 font-medium">Sẵn sàng</span>
+                                </div>
+                                <p id="recognized-chinese-text" class="text-base font-zh font-bold text-amber-300 min-h-[28px]">
+                                    ...
+                                </p>
+                            </div>
+
+                            <div id="ai-evaluation-box" class="hidden p-4 rounded-xl border bg-slate-950 transition-all">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center space-x-3">
+                                        <div id="eval-score-circle" class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center">
+                                            0%
+                                        </div>
+                                        <div>
+                                            <h4 id="eval-title" class="text-sm font-bold text-white">Chính xác xuất sắc!</h4>
+                                            <p id="eval-desc" class="text-xs text-slate-400">Bạn phát âm rất chuẩn câu tiếng Trung.</p>
+                                        </div>
+                                    </div>
+                                    <button id="btn-submit-result" onclick="submitVideoAnswer()" class="px-3.5 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl transition-all">
+                                        <i class="fa-solid fa-paper-plane mr-1"></i>Nộp Bài Cho GV
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- TEACHER VIEW -->
+        <section id="teacher-view" class="hidden space-y-6">
+            <div class="flex items-center justify-between border-b border-slate-800 pb-4">
+                <div>
+                    <h2 class="text-xl font-bold text-white">Trang Quản Lý Của Giáo Viên</h2>
+                    <p class="text-xs text-slate-400">Thêm câu hỏi mới và xem kết quả quay video bài làm của học sinh.</p>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="switchTeacherTab('submissions')" id="tab-btn-sub" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">
+                        <i class="fa-solid fa-folder-open mr-1.5"></i>Bài Làm Học Sinh
+                    </button>
+                    <button onclick="switchTeacherTab('questions')" id="tab-btn-quest" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold">
+                        <i class="fa-solid fa-plus-circle mr-1.5"></i>Quản Lý Bộ Câu Hỏi
+                    </button>
+                </div>
+            </div>
+
+            <!-- Submissions List Tab -->
+            <div id="teacher-tab-submissions" class="space-y-4">
+                <h3 class="text-sm font-bold text-slate-300">Danh sách bài tập học sinh đã nộp:</h3>
+                <div id="submissions-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Dynamic Submissions will appear here -->
+                </div>
+            </div>
+
+            <!-- Manage Questions Tab -->
+            <div id="teacher-tab-questions" class="hidden max-w-2xl bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+                <h3 class="text-sm font-bold text-white">Thêm câu hỏi luyện nói mới</h3>
+                <form onsubmit="addNewQuestion(event)" class="space-y-3">
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Câu hỏi tiếng Trung (Chữ Hán):</label>
+                        <input type="text" id="input-new-zh" placeholder="VD: 你是哪国人？" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Pinyin câu hỏi:</label>
+                        <input type="text" id="input-new-pinyin" placeholder="VD: Nǐ shì nǎ guó rén?" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Dịch tiếng Việt:</label>
+                        <input type="text" id="input-new-vi" placeholder="VD: Bạn là người nước nào?" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Gợi ý đáp án chuẩn tiếng Trung:</label>
+                        <input type="text" id="input-new-sample" placeholder="VD: 我是越南人。" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
+                        + Thêm Vào Danh Sách
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript Application Engine -->
+    <script>
+        // State Management
+        let questions = [
+            {
+                id: 1,
+                zh: "你叫什么名字？",
+                pinyin: "Nǐ jiào shénme míngzì?",
+                vi: "Tên của bạn là gì?",
+                sampleZh: "我叫李华。",
+                samplePinyin: "Wǒ jiào Lǐ Huá."
+            },
+            {
+                id: 2,
+                zh: "你是哪国人？",
+                pinyin: "Nǐ shì nǎ guó rén?",
+                vi: "Bạn là người nước nào?",
+                sampleZh: "我是越南人。",
+                samplePinyin: "Wǒ shì Yuènán rén."
+            },
+            {
+                id: 3,
+                zh: "你喜欢吃什么？",
+                pinyin: "Nǐ xǐhuān chī shénme?",
+                vi: "Bạn thích ăn món gì?",
+                sampleZh: "我喜欢吃米饭。",
+                samplePinyin: "Wǒ xǐhuān chī mǐfàn."
+            }
+        ];
+
+        let currentQuestionIdx = 0;
+        let mediaStream = null;
+        let mediaRecorder = null;
+        let recordedChunks = [];
+        let lastRecordedBlob = null;
+        let isRecording = false;
+        let recordTimerInterval = null;
+        let speechRecognition = null;
+        let recognizedText = "";
+        let submissions = [];
+
+        // DOM Ready
+        window.onload = function() {
+            renderCurrentQuestion();
+            initSpeechRecognition();
+        };
+
+        // Navigation & Role Switch
+        function switchRole(role) {
+            const studentView = document.getElementById('student-view');
+            const teacherView = document.getElementById('teacher-view');
+            const btnStudent = document.getElementById('btn-role-student');
+            const btnTeacher = document.getElementById('btn-role-teacher');
+
+            if (role === 'student') {
+                studentView.classList.remove('hidden');
+                teacherView.classList.add('hidden');
+                btnStudent.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
+                btnTeacher.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+            } else {
+                studentView.classList.add('hidden');
+                teacherView.classList.remove('hidden');
+                btnTeacher.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
+                btnStudent.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+                renderTeacherSubmissions();
+            }
+        }
+
+        function renderCurrentQuestion() {
+            const q = questions[currentQuestionIdx];
+            document.getElementById('question-index-tag').innerText = `Câu ${currentQuestionIdx + 1} / ${questions.length}`;
+            document.getElementById('display-zh-question').innerText = q.zh;
+            document.getElementById('display-pinyin').innerText = q.pinyin;
+            document.getElementById('display-vi-meaning').innerText = `Dịch: ${q.vi}`;
+            document.getElementById('display-sample-answer').innerText = q.sampleZh;
+            document.getElementById('display-sample-pinyin').innerText = q.samplePinyin;
+            
+            // Reset state
+            document.getElementById('recognized-chinese-text').innerText = "...";
+            document.getElementById('ai-evaluation-box').classList.add('hidden');
+        }
+
+        function prevQuestion() {
+            if (currentQuestionIdx > 0) {
+                currentQuestionIdx--;
+                renderCurrentQuestion();
+            }
+        }
+
+        function nextQuestion() {
+            if (currentQuestionIdx < questions.length - 1) {
+                currentQuestionIdx++;
+                renderCurrentQuestion();
+            }
+        }
+
+        // Speech Synthesis (AI Teacher Avatar Voice)
+        function playAIQuestion() {
+            const q = questions[currentQuestionIdx];
+            speakChinese(q.zh);
+        }
+
+        function playAISampleAnswer() {
+            const q = questions[currentQuestionIdx];
+            speakChinese(q.sampleZh);
+        }
+
+        function speakChinese(text) {
+            if (!('speechSynthesis' in window)) {
+                alert('Trình duyệt của bạn không hỗ trợ đọc giọng nói!');
+                return;
+            }
+
+            window.speechSynthesis.cancel(); // Stop ongoing speech
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'zh-CN';
+            utterance.rate = 0.85; // Natural speaking pace
+
+            const avatarContainer = document.getElementById('avatar-container');
+            const soundwave = document.getElementById('avatar-soundwave');
+            const mouth = document.getElementById('avatar-mouth');
+
+            utterance.onstart = () => {
+                avatarContainer.classList.add('avatar-speaking-glow');
+                soundwave.classList.remove('hidden');
+                mouth.setAttribute('d', 'M43 55 Q50 68 57 55'); // Open mouth animation
+            };
+
+            utterance.onend = () => {
+                avatarContainer.classList.remove('avatar-speaking-glow');
+                soundwave.classList.add('hidden');
+                mouth.setAttribute('d', 'M43 58 Q50 62 57 58'); // Reset mouth
+            };
+
+            window.speechSynthesis.speak(utterance);
+        }
+
+        // Webcam & MediaRecorder Logic
+        async function toggleWebcam() {
+            const videoElem = document.getElementById('webcam-preview');
+            const placeholder = document.getElementById('cam-placeholder');
+            const btnCam = document.getElementById('btn-toggle-cam');
+            const btnRecord = document.getElementById('btn-start-record');
+            const statusText = document.getElementById('cam-status-text');
+            const statusSubtext = document.getElementById('cam-status-subtext');
+
+            if (mediaStream) {
+                // Stop Camera
+                mediaStream.getTracks().forEach(track => track.stop());
+                mediaStream = null;
+                videoElem.srcObject = null;
+                placeholder.classList.remove('hidden');
+                btnCam.innerHTML = `<i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera`;
+                btnRecord.disabled = true;
+                statusText.innerText = "Camera chưa được bật.";
+                statusSubtext.innerText = 'Nhấn "Bật Camera" bên dưới để bắt đầu quay bài làm.';
+            } else {
+                // Start Camera
+                try {
+                    mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
+                    videoElem.srcObject = mediaStream;
+                    placeholder.classList.add('hidden');
+                    btnCam.innerHTML = `<i class="fa-solid fa-video-slash mr-1.5 text-rose-400"></i>Tắt Camera`;
+                    btnRecord.disabled = false;
+                } catch (err) {
+                    console.error("Camera Access Error:", err);
+                    placeholder.classList.remove('hidden');
+                    statusText.innerText = "Không thể kết nối Camera!";
+                    statusSubtext.innerText = "Bạn chưa cấp quyền truy cập Camera/Micro trên trình duyệt. Hãy kiểm tra lại biểu tượng ổ khóa ở thanh địa chỉ.";
+                }
+            }
+        }
+
+        function startVideoRecording() {
+            const countdownOverlay = document.getElementById('countdown-overlay');
+            const countdownNumber = document.getElementById('countdown-number');
+            
+            countdownOverlay.classList.remove('hidden');
+            let count = 3;
+            countdownNumber.innerText = count;
+
+            const timer = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdownNumber.innerText = count;
+                } else {
+                    clearInterval(timer);
+                    countdownOverlay.classList.add('hidden');
+                    executeRecordingStart();
+                }
+            }, 1000);
+        }
+
+        function executeRecordingStart() {
+            recordedChunks = [];
+            try {
+                mediaRecorder = new MediaRecorder(mediaStream, { mimeType: 'video/webm' });
+            } catch (e) {
+                mediaRecorder = new MediaRecorder(mediaStream);
+            }
+
+            mediaRecorder.ondataavailable = (event) => {
+                if (event.data.size > 0) {
+                    recordedChunks.push(event.data);
+                }
+            };
+
+            mediaRecorder.onstop = () => {
+                lastRecordedBlob = new Blob(recordedChunks, { type: 'video/webm' });
+                const videoURL = URL.createObjectURL(lastRecordedBlob);
+                const playback = document.getElementById('recorded-playback');
+                playback.src = videoURL;
+                playback.classList.remove('hidden');
+                document.getElementById('webcam-preview').classList.add('hidden');
+            };
+
+            mediaRecorder.start();
+            isRecording = true;
+
+            // UI Adjustments
+            document.getElementById('btn-start-record').classList.add('hidden');
+            document.getElementById('btn-stop-record').classList.remove('hidden');
+            document.getElementById('recording-timer').classList.remove('hidden');
+
+            // Timer Counter
+            let seconds = 0;
+            recordTimerInterval = setInterval(() => {
+                seconds++;
+                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                document.getElementById('recording-timer').innerText = `● REC ${mins}:${secs}`;
+            }, 1000);
+
+            // Start Speech Recognition Simultaneously
+            startSTT();
+        }
+
+        function stopVideoRecording() {
+            if (mediaRecorder && isRecording) {
+                mediaRecorder.stop();
+                isRecording = false;
+                clearInterval(recordTimerInterval);
+
+                document.getElementById('btn-start-record').classList.remove('hidden');
+                document.getElementById('btn-stop-record').classList.add('hidden');
+                document.getElementById('recording-timer').classList.add('hidden');
+
+                stopSTT();
+            }
+        }
+
+        // Web Speech Recognition (STT & Automatic AI Grading)
+        function initSpeechRecognition() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                speechRecognition = new SpeechRecognition();
+                speechRecognition.continuous = true;
+                speechRecognition.interimResults = true;
+                speechRecognition.lang = 'zh-CN';
+
+                speechRecognition.onresult = (event) => {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    recognizedText = transcript;
+                    document.getElementById('recognized-chinese-text').innerText = transcript || "...";
+                };
+
+                speechRecognition.onend = () => {
+                    document.getElementById('stt-status').innerText = "Đã hoàn thành nhận diện";
+                    evaluateAnswer();
+                };
+            }
+        }
+
+        function startSTT() {
+            if (speechRecognition) {
+                recognizedText = "";
+                document.getElementById('recognized-chinese-text').innerText = "Đang lắng nghe...";
+                document.getElementById('stt-status').innerText = "Đang nhận diện giọng nói...";
+                try { speechRecognition.start(); } catch(e) {}
+            }
+        }
+
+        function stopSTT() {
+            if (speechRecognition) {
+                try { speechRecognition.stop(); } catch(e) {}
+            }
+        }
+
+        function evaluateAnswer() {
+            const currentQ = questions[currentQuestionIdx];
+            const targetSample = currentQ.sampleZh;
+            
+            // Calculate similarity score
+            let score = 0;
+            if (recognizedText && recognizedText.trim().length > 0) {
+                let matches = 0;
+                for (let char of targetSample) {
+                    if (recognizedText.includes(char)) matches++;
+                }
+                score = Math.min(100, Math.round((matches / targetSample.length) * 100));
+            }
+
+            const evalBox = document.getElementById('ai-evaluation-box');
+            const scoreCircle = document.getElementById('eval-score-circle');
+            const evalTitle = document.getElementById('eval-title');
+            const evalDesc = document.getElementById('eval-desc');
+
+            evalBox.classList.remove('hidden');
+            scoreCircle.innerText = `${score}%`;
+
+            if (score >= 80) {
+                evalTitle.innerText = "Xuất sắc! Phát âm rất chuẩn";
+                evalDesc.innerText = "Câu nói của bạn rất rõ ràng và chuẩn xác.";
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center";
+            } else if (score >= 50) {
+                evalTitle.innerText = "Khá tốt! Cần luyện thêm giọng";
+                evalDesc.innerText = "AI nhận diện được phần lớn câu trả lời của bạn.";
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-lg flex items-center justify-center";
+            } else {
+                evalTitle.innerText = "Cần cố gắng hơn";
+                evalDesc.innerText = "Hãy nghe lại câu mẫu của AI và phát âm to rõ hơn nhé.";
+                scoreCircle.className = "w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-lg flex items-center justify-center";
+            }
+        }
+
+        // Submit Answer to Teacher Dashboard
+        function submitVideoAnswer() {
+            const studentName = document.getElementById('student-name-input').value || "Học sinh ẩn danh";
+            const q = questions[currentQuestionIdx];
+
+            const submission = {
+                id: Date.now(),
+                studentName: studentName,
+                questionZh: q.zh,
+                recognizedText: recognizedText || "Không nhận diện được giọng nói",
+                score: document.getElementById('eval-score-circle').innerText,
+                time: new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN'),
+                videoUrl: lastRecordedBlob ? URL.createObjectURL(lastRecordedBlob) : null
+            };
+
+            submissions.unshift(submission);
+            alert("✅ Nộp bài thành công! Giáo viên có thể xem video của bạn trong trang Quản Lý.");
+        }
+
+        // Teacher Dashboard Tabs & Actions
+        function switchTeacherTab(tab) {
+            const subTab = document.getElementById('teacher-tab-submissions');
+            const questTab = document.getElementById('teacher-tab-questions');
+            const btnSub = document.getElementById('tab-btn-sub');
+            const btnQuest = document.getElementById('tab-btn-quest');
+
+            if (tab === 'submissions') {
+                subTab.classList.remove('hidden');
+                questTab.classList.add('hidden');
+                btnSub.className = "px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold";
+                btnQuest.className = "px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold";
+            } else {
+                subTab.classList.add('hidden');
+                questTab.classList.remove('hidden');
+                btnQuest.className = "px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold";
+                btnSub.className = "px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold";
+            }
+        }
+
+        function renderTeacherSubmissions() {
+            const container = document.getElementById('submissions-container');
+            container.innerHTML = "";
+
+            if (submissions.length === 0) {
+                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full italic">Chưa có bài nộp nào từ học sinh.</p>`;
+                return;
+            }
+
+            submissions.forEach(sub => {
+                const card = document.createElement('div');
+                card.className = "bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3";
+                card.innerHTML = `
+                    <div class="flex items-center justify-between">
+                        <span class="text-xs font-bold text-cyan-400">${sub.studentName}</span>
+                        <span class="text-[10px] text-slate-500">${sub.time}</span>
+                    </div>
+                    <div class="text-xs space-y-1">
+                        <p class="text-slate-400">Câu hỏi: <strong class="text-white">${sub.questionZh}</strong></p>
+                        <p class="text-slate-400">AI Nhận diện: <strong class="text-amber-300">${sub.recognizedText}</strong></p>
+                        <p class="text-slate-400">Điểm số AI: <strong class="text-emerald-400">${sub.score}</strong></p>
+                    </div>
+                    ${sub.videoUrl ? `<video src="${sub.videoUrl}" controls class="w-full aspect-video rounded-xl bg-black object-cover"></video>` : '<p class="text-[11px] text-slate-600">Không có video</p>'}
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        function addNewQuestion(e) {
+            e.preventDefault();
+            const newQ = {
+                id: questions.length + 1,
+                zh: document.getElementById('input-new-zh').value,
+                pinyin: document.getElementById('input-new-pinyin').value,
+                vi: document.getElementById('input-new-vi').value,
+                sampleZh: document.getElementById('input-new-sample').value,
+                samplePinyin: ""
+            };
+            questions.push(newQ);
+            alert("✅ Đã thêm câu hỏi mới vào danh sách!");
+            e.target.reset();
+            renderCurrentQuestion();
+        }
+    </script>
+</body>
+</html>
