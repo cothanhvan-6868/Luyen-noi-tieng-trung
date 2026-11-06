@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MandarinVoice AI - Luyện Nói Tiếng Trung Smart AI</title>
+    <title>MandarinVoice AI - Luyện Phản Xạ Nghe Nói Smart AI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -47,12 +47,6 @@
             0% { height: 6px; }
             100% { height: 32px; }
         }
-
-        .blur-text {
-            filter: blur(6px);
-            user-select: none;
-            transition: all 0.3s ease;
-        }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
@@ -94,7 +88,7 @@
                 <div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xl font-extrabold bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">MandarinAI</span>
-                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-cyan-400 border border-indigo-500/30">SMART SPEECH EVALUATION</span>
+                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-cyan-400 border border-indigo-500/30">REFLEX SPEAKING MODE</span>
                     </div>
                 </div>
             </div>
@@ -140,7 +134,7 @@
             <!-- TWO-COLUMN WORKSPACE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
-                <!-- LEFT COLUMN: AI TEACHER AVATAR -->
+                <!-- LEFT COLUMN: AI TEACHER AVATAR & REFLEX AUDIO -->
                 <div class="flex flex-col h-full">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow relative overflow-hidden">
                         
@@ -150,7 +144,7 @@
                                     Bài 1 - Câu 1 / 2
                                 </span>
                                 <span class="text-[11px] text-amber-400 font-bold flex items-center bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20">
-                                    <i class="fa-solid fa-ear-listen mr-1.5"></i>Luyện Nghe Phản Xạ
+                                    <i class="fa-solid fa-lock mr-1.5"></i>Chế Độ Khóa Chữ (Thuần Nghe Phản Xạ)
                                 </span>
                             </div>
 
@@ -191,17 +185,14 @@
                                 </div>
                             </div>
 
-                            <!-- HIDDEN / REVEALABLE QUESTION BOX -->
+                            <!-- QUESTION BOX (STRICTLY LOCKED UNTIL ANSWERED) -->
                             <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 my-3 space-y-2 relative">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Nội dung câu hỏi:</span>
-                                    <button onclick="toggleShowQuestion()" class="text-[11px] text-cyan-400 hover:underline flex items-center space-x-1 font-semibold">
-                                        <i id="eye-icon" class="fa-solid fa-eye mr-1"></i>
-                                        <span id="eye-text">Hiện chữ (Nếu khó nghe)</span>
-                                    </button>
+                                <div id="question-locked-notice" class="flex items-center space-x-2 text-amber-400 text-xs font-semibold">
+                                    <i class="fa-solid fa-lock"></i>
+                                    <span>Nội dung câu hỏi đang được ẩn để bạn luyện phản xạ nghe.</span>
                                 </div>
 
-                                <div id="question-text-box" class="blur-text">
+                                <div id="question-text-box" class="hidden">
                                     <h2 id="display-zh-question" class="text-2xl font-bold font-zh text-white tracking-wide">
                                         你叫什么名字？
                                     </h2>
@@ -214,22 +205,21 @@
                                 </div>
                             </div>
 
-                            <!-- SAMPLE ANSWERS (REVEALABLE) -->
+                            <!-- SAMPLE ANSWERS (STRICTLY LOCKED UNTIL ANSWERED) -->
                             <div class="bg-indigo-950/40 border border-indigo-900/60 rounded-xl p-3.5 text-xs relative">
-                                <div class="flex items-center justify-between mb-1">
-                                    <span class="font-bold text-indigo-300 uppercase tracking-wide text-[10px]">
-                                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i>Gợi ý đáp án chuẩn:
-                                    </span>
-                                    <div class="flex items-center space-x-3">
+                                <div id="sample-locked-notice" class="flex items-center justify-between text-indigo-300 text-xs font-medium">
+                                    <span class="flex items-center"><i class="fa-solid fa-lock mr-2 text-amber-400"></i>Gợi ý đáp án sẽ tự động mở sau khi bạn trả lời xong.</span>
+                                </div>
+
+                                <div id="sample-text-box" class="hidden">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <span class="font-bold text-indigo-300 uppercase tracking-wide text-[10px]">
+                                            <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i>Gợi ý đáp án chuẩn:
+                                        </span>
                                         <button onclick="playAISampleAnswer()" class="text-[11px] text-cyan-400 hover:underline">
                                             <i class="fa-solid fa-play mr-1"></i>Nghe mẫu
                                         </button>
-                                        <button onclick="toggleShowSample()" class="text-[11px] text-indigo-300 hover:underline">
-                                            <span id="sample-eye-text">Mở xem chữ</span>
-                                        </button>
                                     </div>
-                                </div>
-                                <div id="sample-text-box" class="blur-text">
                                     <p id="display-sample-answer" class="font-zh font-bold text-slate-200 text-sm">
                                         我叫李华。
                                     </p>
@@ -252,7 +242,7 @@
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: STUDENT WEBCAM & SMART AI ANALYSIS -->
+                <!-- RIGHT COLUMN: STUDENT WEBCAM & SMART AI EVALUATION -->
                 <div class="flex flex-col h-full">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow">
                         <div>
@@ -281,7 +271,7 @@
                                 </div>
                             </div>
 
-                            <!-- WEBCAM ACTION BUTTONS -->
+                            <!-- WEBCAM ACTION BUTTONS (ALLOW RETRIES) -->
                             <div class="flex flex-wrap items-center justify-between gap-2 mt-4">
                                 <button id="btn-toggle-cam" onclick="toggleWebcam()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition-all border border-slate-700">
                                     <i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera
@@ -289,17 +279,17 @@
 
                                 <div class="flex items-center space-x-2">
                                     <button id="btn-start-record" onclick="startVideoRecording()" disabled class="px-4 py-2 bg-rose-600 hover:bg-rose-500 disabled:bg-slate-800 disabled:text-slate-600 text-white text-xs font-bold rounded-xl transition-all shadow-lg flex items-center">
-                                        <i class="fa-solid fa-circle mr-1.5 text-xs animate-pulse"></i>Quay Video & Nói
+                                        <i class="fa-solid fa-circle mr-1.5 text-xs animate-pulse"></i><span id="btn-record-label">Quay Video & Nói</span>
                                     </button>
 
                                     <button id="btn-stop-record" onclick="stopVideoRecording()" class="hidden px-4 py-2 bg-slate-800 hover:bg-slate-700 text-rose-400 border border-rose-500/40 text-xs font-bold rounded-xl transition-all">
-                                        <i class="fa-solid fa-square mr-1.5"></i>Dừng Quay
+                                        <i class="fa-solid fa-square mr-1.5"></i>Dừng Quay & Chấm Điểm
                                     </button>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- STT & ADVANCED DETAILED ERROR EVALUATION -->
+                        <!-- STT & DETAILED AI EVALUATION -->
                         <div class="space-y-3 mt-4 pt-4 border-t border-slate-800">
                             <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
                                 <div class="flex items-center justify-between text-[11px] text-slate-400">
@@ -311,7 +301,7 @@
                                 </p>
                             </div>
 
-                            <!-- AI DETAILED DIAGNOSIS BOX -->
+                            <!-- AI DIAGNOSIS & RETRY BOX -->
                             <div id="ai-evaluation-box" class="hidden p-4 rounded-xl border bg-slate-950 transition-all space-y-3">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
@@ -328,11 +318,11 @@
                                     </button>
                                 </div>
 
-                                <!-- DETAILED ERROR HIGHLIGHTING -->
+                                <!-- COLOR-CODED DETAILED ERROR DIAGNOSIS -->
                                 <div id="error-analysis-detail" class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
-                                    <p class="text-[10px] uppercase font-bold text-cyan-400">Chi tiết phân tích lỗi sai:</p>
+                                    <p class="text-[10px] uppercase font-bold text-cyan-400">Phân tích kết quả chi tiết:</p>
                                     <div id="error-breakdown-text" class="text-slate-300 font-zh leading-relaxed">
-                                        <!-- Dynamic Error Analysis -->
+                                        <!-- Dynamic Analysis Content -->
                                     </div>
                                 </div>
                             </div>
@@ -342,7 +332,7 @@
 
             </div>
 
-            <!-- SUMMARY REPORT SHEET FOR STUDENT (CAN BE SCREENSHOTTED & SENT TO TEACHER) -->
+            <!-- SUMMARY REPORT SHEET FOR STUDENT (CAN BE SCREENSHOTTED & SUBMITTED) -->
             <div id="student-report-card" class="bg-gradient-to-br from-slate-900 to-indigo-950 border-2 border-indigo-500/40 rounded-3xl p-6 shadow-2xl space-y-4">
                 <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-indigo-500/30 pb-4">
                     <div>
@@ -357,7 +347,7 @@
                 </div>
 
                 <div id="report-questions-list" class="space-y-3">
-                    <!-- Dynamic Question Breakdown Reports -->
+                    <!-- Dynamic Question Reports with Green/Red Color Coding -->
                     <p class="text-xs text-slate-400 italic">Hãy hoàn thành quay video các câu hỏi ở trên để xuất báo cáo bài làm tại đây.</p>
                 </div>
 
@@ -430,7 +420,7 @@
             }
         }
 
-        // Multi-Lesson Database
+        // Multi-Lesson Database Structure
         let lessonsData = {
             "1": [
                 {
@@ -539,38 +529,22 @@
             document.getElementById('display-sample-answer').innerText = q.sampleZh;
             document.getElementById('display-sample-pinyin').innerText = q.samplePinyin || "";
             
-            // Reset blur state for new question
-            document.getElementById('question-text-box').classList.add('blur-text');
-            document.getElementById('sample-text-box').classList.add('blur-text');
-            document.getElementById('eye-text').innerText = "Hiện chữ (Nếu khó nghe)";
-            document.getElementById('sample-eye-text').innerText = "Mở xem chữ";
+            // ENSURE LOCKED STATE ON QUESTION & SAMPLE BEFORE ANSWERING
+            document.getElementById('question-locked-notice').classList.remove('hidden');
+            document.getElementById('question-text-box').classList.add('hidden');
+            document.getElementById('sample-locked-notice').classList.remove('hidden');
+            document.getElementById('sample-text-box').classList.add('hidden');
 
-            // Reset state
+            // Reset STT & Evaluation
             document.getElementById('recognized-chinese-text').innerText = "...";
             document.getElementById('ai-evaluation-box').classList.add('hidden');
-        }
 
-        function toggleShowQuestion() {
-            const box = document.getElementById('question-text-box');
-            const eyeText = document.getElementById('eye-text');
-            if (box.classList.contains('blur-text')) {
-                box.classList.remove('blur-text');
-                eyeText.innerText = "Ẩn chữ";
+            // Check if retried question already exists
+            const rep = studentAnswersReport[q.id];
+            if (rep) {
+                document.getElementById('btn-record-label').innerText = "Thực Hành Nói Lại (Quay Lại)";
             } else {
-                box.classList.add('blur-text');
-                eyeText.innerText = "Hiện chữ (Nếu khó nghe)";
-            }
-        }
-
-        function toggleShowSample() {
-            const box = document.getElementById('sample-text-box');
-            const eyeText = document.getElementById('sample-eye-text');
-            if (box.classList.contains('blur-text')) {
-                box.classList.remove('blur-text');
-                eyeText.innerText = "Ẩn chữ gợi ý";
-            } else {
-                box.classList.add('blur-text');
-                eyeText.innerText = "Mở xem chữ";
+                document.getElementById('btn-record-label').innerText = "Quay Video & Nói";
             }
         }
 
@@ -628,7 +602,7 @@
             window.speechSynthesis.speak(utterance);
         }
 
-        // Camera Management with Graceful Error Handling
+        // Camera Management
         async function toggleWebcam() {
             const videoElem = document.getElementById('webcam-preview');
             const placeholder = document.getElementById('cam-placeholder');
@@ -780,11 +754,18 @@
             const currentQ = currentQuestions[currentQuestionIdx];
             if (!currentQ) return;
 
+            // UNLOCK QUESTION & SAMPLE TEXT AFTER SUBMISSION
+            document.getElementById('question-locked-notice').classList.add('hidden');
+            document.getElementById('question-text-box').classList.remove('hidden');
+            document.getElementById('sample-locked-notice').classList.add('hidden');
+            document.getElementById('sample-text-box').classList.remove('hidden');
+
             let score = 0;
             const targetSample = currentQ.sampleZh;
             const validKeywords = currentQ.validAnswers || [targetSample];
 
             let errorHtml = "";
+            let isPassed = false;
 
             if (recognizedText && recognizedText.trim().length > 0) {
                 const cleanInput = recognizedText.replace(/[.,?!，。？！]/g, '').trim();
@@ -810,21 +791,25 @@
 
                 if (matchedKeyword) {
                     score = Math.max(90, charScore);
-                    errorHtml = `<p class="text-emerald-400 font-bold">✓ Học sinh trả lời đúng từ khóa cốt lõi!</p>`;
+                    isPassed = true;
+                    errorHtml = `<p class="text-emerald-400 font-bold">✓ Chính xác! Trả lời đúng cấu trúc & từ khóa cốt lõi.</p>`;
                 } else if (charScore >= 50) {
                     score = Math.max(75, charScore);
-                    errorHtml = `<p class="text-amber-400 font-bold">⚠ Đúng ý nhưng phát âm ngọng hoặc thiếu chữ:</p>
+                    isPassed = true;
+                    errorHtml = `<p class="text-amber-400 font-bold">⚠ Đúng ý nhưng phát âm chưa chuẩn hoặc thiếu chữ:</p>
                                  <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
-                                 <p>Các từ phát âm chưa chuẩn/thiếu: <span class="text-rose-400 font-bold">${missingChars.join(', ') || 'Chưa rõ'}</span></p>`;
+                                 <p>Từ phát âm chưa chuẩn/thiếu: <span class="text-rose-400 font-bold">${missingChars.join(', ') || 'Chưa rõ'}</span></p>`;
                 } else {
-                    score = Math.min(100, charScore);
-                    errorHtml = `<p class="text-rose-400 font-bold">❌ Trả lời chưa chính xác hoặc nói sai từ:</p>
+                    score = Math.min(45, charScore);
+                    isPassed = false;
+                    errorHtml = `<p class="text-rose-400 font-bold">❌ Sai ngữ pháp / Lạc đề / Phát âm ngọng:</p>
                                  <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
-                                 <p>Đáp án chuẩn: <span class="text-cyan-300 font-bold">${targetSample}</span></p>`;
+                                 <p>Gợi ý đáp án đúng: <span class="text-cyan-300 font-bold">${targetSample}</span></p>`;
                 }
             } else {
                 score = 0;
-                errorHtml = `<p class="text-rose-400">Không nghe thấy giọng nói của học sinh.</p>`;
+                isPassed = false;
+                errorHtml = `<p class="text-rose-400 font-bold">❌ Không nghe thấy giọng nói của học sinh (Chưa phát âm).</p>`;
             }
 
             const evalBox = document.getElementById('ai-evaluation-box');
@@ -838,33 +823,35 @@
             breakdownText.innerHTML = errorHtml;
 
             if (score >= 80) {
-                evalTitle.innerText = "Xuất sắc! Phát âm & Ý nghĩa rất chuẩn";
+                evalTitle.innerText = "Xuất sắc! Trả lời & Phát âm rất chuẩn";
                 evalDesc.innerText = "AI đánh giá câu trả lời hợp lệ 100%.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center";
             } else if (score >= 50) {
-                evalTitle.innerText = "Khá tốt! Cần sửa lỗi từ phát âm";
-                evalDesc.innerText = "Xem chi tiết các từ bị sai ở khung phân tích bên dưới.";
+                evalTitle.innerText = "Khá tốt! Cần luyện lại phát âm";
+                evalDesc.innerText = "Có thể bấm Quay lại để luyện lại câu này.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-lg flex items-center justify-center";
             } else {
-                evalTitle.innerText = "Chưa đạt! Cần luyện tập lại";
-                evalDesc.innerText = "Học sinh trả lời chưa đúng đáp án hoặc chưa phát âm rõ.";
+                evalTitle.innerText = "Chưa đạt! Cần quay làm lại câu này";
+                evalDesc.innerText = "Hãy nghe kỹ lại câu hỏi và bấm Quay video làm lại.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-lg flex items-center justify-center";
             }
 
-            // Auto save to student report
-            saveCurrentQuestionResult(score, errorHtml);
+            // Save result immediately to student report
+            saveCurrentQuestionResult(score, errorHtml, isPassed);
         }
 
-        function saveCurrentQuestionResult(scoreVal, errorHtmlVal) {
+        function saveCurrentQuestionResult(scoreVal, errorHtmlVal, isPassed) {
             const currentQuestions = getCurrentQuestionsList();
             const q = currentQuestions[currentQuestionIdx];
             const scoreStr = document.getElementById('eval-score-circle').innerText;
+            const numScore = parseInt(scoreStr) || 0;
 
             studentAnswersReport[q.id] = {
                 questionZh: q.zh,
                 studentSpoke: recognizedText || "Chưa phát âm",
                 score: scoreStr,
-                numericScore: parseInt(scoreStr) || 0,
+                numericScore: numScore,
+                isCorrect: numScore >= 50,
                 errorDetail: document.getElementById('error-breakdown-text').innerHTML
             };
 
@@ -886,23 +873,29 @@
             currentQuestions.forEach((q, idx) => {
                 const rep = studentAnswersReport[q.id];
                 const card = document.createElement('div');
-                card.className = "bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1 text-xs";
 
                 if (rep) {
                     totalScoresSum += rep.numericScore;
                     answeredCount++;
+                    
+                    const isGreen = rep.numericScore >= 50;
+                    card.className = `p-3.5 rounded-xl border space-y-1 text-xs ${isGreen ? 'bg-emerald-950/40 border-emerald-500/40' : 'bg-rose-950/40 border-rose-500/40'}`;
+
                     card.innerHTML = `
                         <div class="flex items-center justify-between">
-                            <span class="font-bold text-white">Câu ${idx + 1}: ${q.zh}</span>
-                            <span class="font-black ${rep.numericScore >= 80 ? 'text-emerald-400' : (rep.numericScore >= 50 ? 'text-amber-400' : 'text-rose-400')}">${rep.score}</span>
+                            <span class="font-bold ${isGreen ? 'text-emerald-300' : 'text-rose-300'}">Câu ${idx + 1}: [Nội dung đã được kiểm tra]</span>
+                            <span class="px-2 py-0.5 rounded text-[11px] font-black ${isGreen ? 'bg-emerald-500/20 text-emerald-400 border border-emerald-500/30' : 'bg-rose-500/20 text-rose-400 border border-rose-500/30'}">
+                                ${isGreen ? '✓ ĐÚNG' : '❌ SAI'} (${rep.score})
+                            </span>
                         </div>
-                        <p class="text-slate-400">HS phát âm: <strong class="text-amber-300 font-zh">${rep.studentSpoke}</strong></p>
+                        <p class="text-slate-300">Học sinh đã trả lời: <strong class="text-amber-300 font-zh">${rep.studentSpoke}</strong></p>
                         <div class="text-[11px] mt-1 pt-1 border-t border-slate-800/80">${rep.errorDetail}</div>
                     `;
                 } else {
+                    card.className = "bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1 text-xs";
                     card.innerHTML = `
                         <div class="flex items-center justify-between">
-                            <span class="font-bold text-slate-400">Câu ${idx + 1}: ${q.zh}</span>
+                            <span class="font-bold text-slate-400">Câu ${idx + 1}</span>
                             <span class="text-slate-600 font-bold">Chưa làm</span>
                         </div>
                     `;
