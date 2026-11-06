@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MandarinVoice AI - Avatar & Video Interactive</title>
+    <title>MandarinVoice AI - Luyện Nói Tiếng Trung Smart AI</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
@@ -34,16 +34,9 @@
         }
     </script>
     <style>
-        .cyber-glow {
-            box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4);
-        }
-        .avatar-speaking-glow {
-            box-shadow: 0 0 35px 5px rgba(6, 182, 212, 0.6);
-            border-color: #06b6d4 !important;
-        }
-        .wave-bar {
-            animation: soundwave 1.2s ease-in-out infinite alternate;
-        }
+        .cyber-glow { box-shadow: 0 0 25px -5px rgba(99, 102, 241, 0.4); }
+        .avatar-speaking-glow { box-shadow: 0 0 35px 5px rgba(6, 182, 212, 0.6); border-color: #06b6d4 !important; }
+        .wave-bar { animation: soundwave 1.2s ease-in-out infinite alternate; }
         .wave-bar:nth-child(1) { animation-delay: 0.1s; }
         .wave-bar:nth-child(2) { animation-delay: 0.3s; }
         .wave-bar:nth-child(3) { animation-delay: 0.2s; }
@@ -55,21 +48,16 @@
             100% { height: 32px; }
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 5px;
-        }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(241, 245, 249, 0.5);
-        }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: #cbd5e1;
-            border-radius: 4px;
+        .blur-text {
+            filter: blur(6px);
+            user-select: none;
+            transition: all 0.3s ease;
         }
     </style>
 </head>
 <body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col selection:bg-indigo-500 selection:text-white">
 
-    <!-- PASSWORD MODAL -->
+    <!-- PASSWORD OVERLAY MODAL -->
     <div id="password-overlay" class="fixed inset-0 z-[100] bg-slate-950/95 backdrop-blur-md flex items-center justify-center p-4">
         <div class="bg-slate-900 border border-slate-800 p-6 sm:p-8 rounded-3xl max-w-md w-full shadow-2xl text-center space-y-5">
             <div class="w-16 h-16 bg-gradient-to-tr from-indigo-500 to-cyan-400 rounded-2xl flex items-center justify-center mx-auto shadow-lg shadow-indigo-500/30">
@@ -77,40 +65,24 @@
             </div>
             <div>
                 <h2 class="text-xl font-bold text-white">Lớp Học Tiếng Trung Chuyên Biệt</h2>
-                <p class="text-xs text-slate-400 mt-1">Trang web này chỉ dành riêng cho học sinh được Giáo viên cấp quyền. Vui lòng nhập mật khẩu lớp học để tiếp tục.</p>
+                <p class="text-xs text-slate-400 mt-1">Trang web dành riêng cho học sinh được Giáo viên cấp quyền.</p>
             </div>
             
             <form onsubmit="verifyClassPassword(event)" class="space-y-4">
                 <div>
                     <input type="password" id="input-class-password" placeholder="Nhập mật khẩu lớp học..." class="w-full px-4 py-3 bg-slate-950 border border-slate-700 rounded-xl text-sm text-center text-cyan-400 font-bold focus:outline-none focus:border-cyan-400 tracking-widest placeholder:font-normal placeholder:tracking-normal placeholder:text-slate-600">
-                    <p id="password-error" class="hidden text-xs text-rose-500 mt-2 font-medium">⚠️ Mật khẩu không đúng! Vui lòng hỏi Giáo viên.</p>
+                    <p id="password-error" class="hidden text-xs text-rose-500 mt-2 font-medium">⚠️ Mật khẩu không đúng!</p>
                 </div>
                 <button type="submit" class="w-full py-3 bg-gradient-to-r from-indigo-600 to-cyan-500 hover:from-indigo-500 hover:to-cyan-400 text-slate-950 font-bold text-sm rounded-xl shadow-lg transition-all flex items-center justify-center space-x-2">
                     <i class="fa-solid fa-key"></i>
-                    <span>Xác Nhận Vào Học</span>
+                    <span>Vào Học Ngay</span>
                 </button>
             </form>
             <p class="text-[11px] text-slate-500">Mật khẩu mặc định: <code class="text-indigo-400 font-mono">666666</code></p>
         </div>
     </div>
 
-    <script>
-        const CLASS_PASSWORD = "666666"; 
-
-        function verifyClassPassword(e) {
-            e.preventDefault();
-            const inputPwd = document.getElementById('input-class-password').value;
-            const errorMsg = document.getElementById('password-error');
-            
-            if (inputPwd === CLASS_PASSWORD) {
-                document.getElementById('password-overlay').classList.add('hidden');
-            } else {
-                errorMsg.classList.remove('hidden');
-            }
-        }
-    </script>
-
-    <!-- Header Navigation -->
+    <!-- HEADER NAVIGATION -->
     <header class="bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
             <div class="flex items-center space-x-3">
@@ -122,18 +94,18 @@
                 <div>
                     <div class="flex items-center space-x-2">
                         <span class="text-xl font-extrabold bg-gradient-to-r from-white via-slate-200 to-indigo-300 bg-clip-text text-transparent">MandarinAI</span>
-                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-cyan-400 border border-indigo-500/30">AVATAR 3D & CAMERA</span>
+                        <span class="px-2 py-0.5 text-[10px] font-bold rounded-full bg-indigo-500/20 text-cyan-400 border border-indigo-500/30">SMART SPEECH EVALUATION</span>
                     </div>
                 </div>
             </div>
 
-            <!-- Role & Controls -->
+            <!-- Role Selector -->
             <div class="flex items-center space-x-3">
                 <div class="bg-slate-800/80 p-1 rounded-xl flex items-center border border-slate-700">
-                    <button id="btn-role-student" onclick="switchRole('student')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md">
-                        <i class="fa-solid fa-video mr-1.5"></i>Học Sinh Luyện Nói
+                    <button id="btn-role-student" onclick="switchRole('student')" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md">
+                        <i class="fa-solid fa-video mr-1.5"></i>Học Sinh
                     </button>
-                    <button id="btn-role-teacher" onclick="switchRole('teacher')" class="px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200">
+                    <button id="btn-role-teacher" onclick="switchRole('teacher')" class="px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200">
                         <i class="fa-solid fa-user-gear mr-1.5"></i>Giáo Viên
                     </button>
                 </div>
@@ -141,41 +113,48 @@
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- MAIN APP CONTAINER -->
     <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
 
         <!-- STUDENT VIEW -->
         <section id="student-view" class="space-y-6">
+            
+            <!-- LESSON SELECTOR & STUDENT INFO BAR -->
             <div class="bg-slate-900/60 border border-slate-800 p-4 rounded-2xl flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div class="flex items-center space-x-3">
-                    <div class="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></div>
-                    <span class="text-xs font-semibold text-slate-400 uppercase tracking-wider">Trạng thái phòng: <span class="text-emerald-400">Sẵn sàng thu âm & camera</span></span>
+                <div class="flex items-center space-x-3 w-full sm:w-auto">
+                    <i class="fa-solid fa-book-bookmark text-indigo-400"></i>
+                    <label for="lesson-select" class="text-xs font-bold text-slate-300 whitespace-nowrap">Chọn Bài Học:</label>
+                    <select id="lesson-select" onchange="changeLesson(this.value)" class="px-3 py-1.5 bg-slate-950 border border-indigo-500/50 rounded-xl text-xs font-bold text-cyan-400 focus:outline-none focus:border-cyan-400 w-full sm:w-64 cursor-pointer">
+                        <option value="1">Bài 1: Chào hỏi & Tên tuổi (HSK 1)</option>
+                        <option value="2">Bài 2: Quốc tịch & Quê quán (HSK 1)</option>
+                        <option value="3">Bài 3: Sở thích & Ăn uống (HSK 1)</option>
+                    </select>
                 </div>
+
                 <div class="flex items-center space-x-3 w-full sm:w-auto">
                     <label for="student-name-input" class="text-xs font-medium text-slate-300 whitespace-nowrap">Họ tên học sinh:</label>
                     <input type="text" id="student-name-input" value="Học sinh Nguyễn Văn A" placeholder="Nhập tên..." class="px-3 py-1.5 bg-slate-950 border border-slate-700 rounded-lg text-xs text-slate-200 focus:outline-none focus:border-cyan-400 w-full sm:w-56">
                 </div>
             </div>
 
+            <!-- TWO-COLUMN WORKSPACE -->
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-stretch">
 
                 <!-- LEFT COLUMN: AI TEACHER AVATAR -->
                 <div class="flex flex-col h-full">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow relative overflow-hidden">
                         
-                        <div class="absolute -top-12 -left-12 w-40 h-40 bg-indigo-500/10 rounded-full blur-3xl pointer-events-none"></div>
-                        <div class="absolute -bottom-12 -right-12 w-40 h-40 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
-
                         <div>
                             <div class="flex items-center justify-between mb-4">
                                 <span id="question-index-tag" class="px-3 py-1 rounded-full text-xs font-bold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30">
-                                    Câu 1 / 3
+                                    Bài 1 - Câu 1 / 2
                                 </span>
-                                <span class="text-[11px] text-slate-400 flex items-center">
-                                    <i class="fa-solid fa-sparkles text-amber-400 mr-1.5"></i>Giáo viên AI: Cô Lý (Li Laoshi)
+                                <span class="text-[11px] text-amber-400 font-bold flex items-center bg-amber-400/10 px-2.5 py-1 rounded-lg border border-amber-400/20">
+                                    <i class="fa-solid fa-ear-listen mr-1.5"></i>Luyện Nghe Phản Xạ
                                 </span>
                             </div>
 
+                            <!-- AVATAR CONTAINER -->
                             <div class="relative bg-slate-950 rounded-2xl border-2 border-slate-800 p-5 flex flex-col items-center justify-center my-2 transition-all duration-300" id="avatar-container">
                                 <div id="avatar-soundwave" class="hidden absolute top-4 right-4 flex items-end space-x-1 h-8">
                                     <div class="w-1 bg-cyan-400 rounded-full wave-bar"></div>
@@ -205,44 +184,63 @@
                                 </div>
 
                                 <div class="mt-2 text-center">
-                                    <button onclick="playAIQuestion()" class="px-4 py-2 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white rounded-xl font-medium text-xs shadow-lg transition-all flex items-center space-x-2">
-                                        <i class="fa-solid fa-volume-high text-cyan-200"></i>
-                                        <span>AI Đọc câu hỏi (Giọng tự nhiên)</span>
+                                    <button onclick="playAIQuestion()" class="px-5 py-2.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 text-white rounded-xl font-bold text-xs shadow-lg transition-all flex items-center space-x-2 mx-auto">
+                                        <i class="fa-solid fa-volume-high text-cyan-200 text-sm"></i>
+                                        <span>Bấm Để AI Đọc Câu Hỏi Tiếng Trung</span>
                                     </button>
                                 </div>
                             </div>
 
-                            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 my-3 space-y-2">
-                                <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Câu hỏi tiếng Trung:</span>
-                                <h2 id="display-zh-question" class="text-2xl font-bold font-zh text-white tracking-wide">
-                                    你叫什么名字？
-                                </h2>
-                                <p id="display-pinyin" class="text-sm font-semibold text-cyan-400">
-                                    Nǐ jiào shénme míngzì?
-                                </p>
-                                <p id="display-vi-meaning" class="text-xs text-slate-400 italic">
-                                    Dịch: Tên của bạn là gì?
-                                </p>
+                            <!-- HIDDEN / REVEALABLE QUESTION BOX -->
+                            <div class="bg-slate-950/70 border border-slate-800 rounded-xl p-4 my-3 space-y-2 relative">
+                                <div class="flex items-center justify-between">
+                                    <span class="text-[10px] font-bold uppercase tracking-widest text-slate-400">Nội dung câu hỏi:</span>
+                                    <button onclick="toggleShowQuestion()" class="text-[11px] text-cyan-400 hover:underline flex items-center space-x-1 font-semibold">
+                                        <i id="eye-icon" class="fa-solid fa-eye mr-1"></i>
+                                        <span id="eye-text">Hiện chữ (Nếu khó nghe)</span>
+                                    </button>
+                                </div>
+
+                                <div id="question-text-box" class="blur-text">
+                                    <h2 id="display-zh-question" class="text-2xl font-bold font-zh text-white tracking-wide">
+                                        你叫什么名字？
+                                    </h2>
+                                    <p id="display-pinyin" class="text-sm font-semibold text-cyan-400 mt-1">
+                                        Nǐ jiào shénme míngzì?
+                                    </p>
+                                    <p id="display-vi-meaning" class="text-xs text-slate-400 italic mt-1">
+                                        Dịch: Tên của bạn là gì?
+                                    </p>
+                                </div>
                             </div>
 
-                            <div class="bg-indigo-950/40 border border-indigo-900/60 rounded-xl p-3.5 text-xs">
+                            <!-- SAMPLE ANSWERS (REVEALABLE) -->
+                            <div class="bg-indigo-950/40 border border-indigo-900/60 rounded-xl p-3.5 text-xs relative">
                                 <div class="flex items-center justify-between mb-1">
                                     <span class="font-bold text-indigo-300 uppercase tracking-wide text-[10px]">
-                                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i>Gợi ý câu trả lời mẫu:
+                                        <i class="fa-solid fa-lightbulb text-amber-400 mr-1"></i>Gợi ý đáp án chuẩn:
                                     </span>
-                                    <button onclick="playAISampleAnswer()" class="text-[11px] text-cyan-400 hover:underline">
-                                        <i class="fa-solid fa-play mr-1"></i>Nghe mẫu
-                                    </button>
+                                    <div class="flex items-center space-x-3">
+                                        <button onclick="playAISampleAnswer()" class="text-[11px] text-cyan-400 hover:underline">
+                                            <i class="fa-solid fa-play mr-1"></i>Nghe mẫu
+                                        </button>
+                                        <button onclick="toggleShowSample()" class="text-[11px] text-indigo-300 hover:underline">
+                                            <span id="sample-eye-text">Mở xem chữ</span>
+                                        </button>
+                                    </div>
                                 </div>
-                                <p id="display-sample-answer" class="font-zh font-bold text-slate-200 text-sm">
-                                    我叫李华。
-                                </p>
-                                <p id="display-sample-pinyin" class="text-slate-400 text-[11px]">
-                                    Wǒ jiào Lǐ Huá.
-                                </p>
+                                <div id="sample-text-box" class="blur-text">
+                                    <p id="display-sample-answer" class="font-zh font-bold text-slate-200 text-sm">
+                                        我叫李华。
+                                    </p>
+                                    <p id="display-sample-pinyin" class="text-slate-400 text-[11px]">
+                                        Wǒ jiào Lǐ Huá.
+                                    </p>
+                                </div>
                             </div>
                         </div>
 
+                        <!-- NAVIGATION BUTTONS -->
                         <div class="flex items-center justify-between pt-4 border-t border-slate-800 mt-4">
                             <button id="btn-prev-q" onclick="prevQuestion()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold rounded-lg transition-colors">
                                 <i class="fa-solid fa-chevron-left mr-1"></i> Câu trước
@@ -254,26 +252,27 @@
                     </div>
                 </div>
 
-                <!-- RIGHT COLUMN: STUDENT WEBCAM VIDEO RECORDER -->
+                <!-- RIGHT COLUMN: STUDENT WEBCAM & SMART AI ANALYSIS -->
                 <div class="flex flex-col h-full">
                     <div class="bg-slate-900/90 border border-slate-800 rounded-2xl p-5 flex-grow flex flex-col justify-between cyber-glow">
                         <div>
                             <div class="flex items-center justify-between mb-3">
                                 <span class="text-xs font-bold text-slate-300 flex items-center">
-                                    <i class="fa-solid fa-video text-rose-500 mr-2"></i>Màn hình Camera Học sinh trả lời
+                                    <i class="fa-solid fa-video text-rose-500 mr-2"></i>Webcam Học Sinh Trả Lời
                                 </span>
                                 <div id="recording-timer" class="hidden px-2.5 py-1 bg-rose-500/20 border border-rose-500/30 text-rose-400 text-xs font-mono font-bold rounded-md animate-pulse">
                                     ● REC 00:00
                                 </div>
                             </div>
 
+                            <!-- WEBCAM & PLAYBACK DISPLAY -->
                             <div class="relative bg-slate-950 border-2 border-slate-800 rounded-2xl overflow-hidden aspect-video flex items-center justify-center">
                                 <video id="webcam-preview" autoplay playsinline muted class="w-full h-full object-cover"></video>
                                 <video id="recorded-playback" controls class="w-full h-full object-cover hidden"></video>
 
                                 <div id="cam-placeholder" class="absolute inset-0 bg-slate-950 flex flex-col items-center justify-center text-slate-500 p-4 text-center">
                                     <i class="fa-solid fa-camera-retro text-4xl mb-2 text-slate-600"></i>
-                                    <p id="cam-status-text" class="text-xs">Camera chưa được bật.</p>
+                                    <p id="cam-status-text" class="text-xs font-semibold text-slate-400">Camera chưa được bật.</p>
                                     <p id="cam-status-subtext" class="text-[10px] text-slate-600 mt-1">Nhấn "Bật Camera" bên dưới để bắt đầu quay bài làm.</p>
                                 </div>
 
@@ -282,6 +281,7 @@
                                 </div>
                             </div>
 
+                            <!-- WEBCAM ACTION BUTTONS -->
                             <div class="flex flex-wrap items-center justify-between gap-2 mt-4">
                                 <button id="btn-toggle-cam" onclick="toggleWebcam()" class="px-3.5 py-2 bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold rounded-xl transition-all border border-slate-700">
                                     <i class="fa-solid fa-webcam mr-1.5 text-cyan-400"></i>Bật Camera
@@ -299,10 +299,11 @@
                             </div>
                         </div>
 
+                        <!-- STT & ADVANCED DETAILED ERROR EVALUATION -->
                         <div class="space-y-3 mt-4 pt-4 border-t border-slate-800">
-                            <div class="bg-slate-950 p-3.5 rounded-xl border border-slate-800 space-y-1">
+                            <div class="bg-slate-950 p-3 rounded-xl border border-slate-800 space-y-1">
                                 <div class="flex items-center justify-between text-[11px] text-slate-400">
-                                    <span>AI Nhận diện giọng nói (Speech-to-Text):</span>
+                                    <span>AI Nghe giọng học sinh:</span>
                                     <span id="stt-status" class="text-cyan-400 font-medium">Sẵn sàng</span>
                                 </div>
                                 <p id="recognized-chinese-text" class="text-base font-zh font-bold text-amber-300 min-h-[28px]">
@@ -310,20 +311,29 @@
                                 </p>
                             </div>
 
-                            <div id="ai-evaluation-box" class="hidden p-4 rounded-xl border bg-slate-950 transition-all">
+                            <!-- AI DETAILED DIAGNOSIS BOX -->
+                            <div id="ai-evaluation-box" class="hidden p-4 rounded-xl border bg-slate-950 transition-all space-y-3">
                                 <div class="flex items-center justify-between">
                                     <div class="flex items-center space-x-3">
                                         <div id="eval-score-circle" class="w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center">
                                             0%
                                         </div>
                                         <div>
-                                            <h4 id="eval-title" class="text-sm font-bold text-white">Chính xác xuất sắc!</h4>
-                                            <p id="eval-desc" class="text-xs text-slate-400">Bạn phát âm rất chuẩn câu tiếng Trung.</p>
+                                            <h4 id="eval-title" class="text-xs font-bold text-white">Chính xác xuất sắc!</h4>
+                                            <p id="eval-desc" class="text-[11px] text-slate-400">Bạn trả lời đúng trọng tâm câu hỏi.</p>
                                         </div>
                                     </div>
-                                    <button id="btn-submit-result" onclick="submitVideoAnswer()" class="px-3.5 py-2 bg-cyan-500 hover:bg-cyan-400 text-slate-950 font-bold text-xs rounded-xl transition-all">
-                                        <i class="fa-solid fa-paper-plane mr-1"></i>Nộp Bài Cho GV
+                                    <button onclick="saveCurrentQuestionResult()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-lg transition-all">
+                                        Lưu Điểm Câu Này
                                     </button>
+                                </div>
+
+                                <!-- DETAILED ERROR HIGHLIGHTING -->
+                                <div id="error-analysis-detail" class="bg-slate-900/90 p-3 rounded-lg border border-slate-800 text-xs space-y-1">
+                                    <p class="text-[10px] uppercase font-bold text-cyan-400">Chi tiết phân tích lỗi sai:</p>
+                                    <div id="error-breakdown-text" class="text-slate-300 font-zh leading-relaxed">
+                                        <!-- Dynamic Error Analysis -->
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -331,37 +341,56 @@
                 </div>
 
             </div>
+
+            <!-- SUMMARY REPORT SHEET FOR STUDENT (CAN BE SCREENSHOTTED & SENT TO TEACHER) -->
+            <div id="student-report-card" class="bg-gradient-to-br from-slate-900 to-indigo-950 border-2 border-indigo-500/40 rounded-3xl p-6 shadow-2xl space-y-4">
+                <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-indigo-500/30 pb-4">
+                    <div>
+                        <span class="px-2.5 py-1 bg-cyan-500/20 text-cyan-400 text-[10px] font-bold rounded-md uppercase tracking-wider">Bảng Kết Quả Bài Làm Học Sinh</span>
+                        <h3 id="report-student-name" class="text-lg font-extrabold text-white mt-1">Họ tên: Nguyễn Văn A</h3>
+                        <p id="report-lesson-name" class="text-xs text-indigo-300">Bài làm: Bài 1 (HSK 1)</p>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-[10px] text-slate-400 block">ĐIỂM TRUNG BÌNH BÀI HỌC</span>
+                        <span id="report-total-score" class="text-3xl font-black text-cyan-400">0%</span>
+                    </div>
+                </div>
+
+                <div id="report-questions-list" class="space-y-3">
+                    <!-- Dynamic Question Breakdown Reports -->
+                    <p class="text-xs text-slate-400 italic">Hãy hoàn thành quay video các câu hỏi ở trên để xuất báo cáo bài làm tại đây.</p>
+                </div>
+
+                <div class="pt-2 flex justify-end">
+                    <button onclick="window.print()" class="px-4 py-2 bg-slate-800 hover:bg-slate-700 text-xs font-bold text-cyan-400 rounded-xl border border-cyan-500/30 transition-all flex items-center space-x-2">
+                        <i class="fa-solid fa-camera"></i>
+                        <span>Chụp Ảnh Báo Cáo Nộp Giáo Viên</span>
+                    </button>
+                </div>
+            </div>
         </section>
 
         <!-- TEACHER VIEW -->
         <section id="teacher-view" class="hidden space-y-6">
             <div class="flex items-center justify-between border-b border-slate-800 pb-4">
                 <div>
-                    <h2 class="text-xl font-bold text-white">Trang Quản Lý Của Giáo Viên</h2>
-                    <p class="text-xs text-slate-400">Thêm câu hỏi mới và xem kết quả quay video bài làm của học sinh.</p>
-                </div>
-                <div class="flex space-x-2">
-                    <button onclick="switchTeacherTab('submissions')" id="tab-btn-sub" class="px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold">
-                        <i class="fa-solid fa-folder-open mr-1.5"></i>Bài Làm Học Sinh
-                    </button>
-                    <button onclick="switchTeacherTab('questions')" id="tab-btn-quest" class="px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold">
-                        <i class="fa-solid fa-plus-circle mr-1.5"></i>Quản Lý Bộ Câu Hỏi
-                    </button>
+                    <h2 class="text-xl font-bold text-white">Trang Quản Lý Dành Cho Giáo Viên</h2>
+                    <p class="text-xs text-slate-400">Thêm câu hỏi mới vào từng bài học hoặc quản lý bộ đề.</p>
                 </div>
             </div>
 
-            <!-- Submissions List Tab -->
-            <div id="teacher-tab-submissions" class="space-y-4">
-                <h3 class="text-sm font-bold text-slate-300">Danh sách bài tập học sinh đã nộp:</h3>
-                <div id="submissions-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    <!-- Dynamic Submissions will appear here -->
-                </div>
-            </div>
-
-            <!-- Manage Questions Tab -->
-            <div id="teacher-tab-questions" class="hidden max-w-2xl bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
+            <!-- Add New Question Form -->
+            <div class="max-w-2xl bg-slate-900 border border-slate-800 p-6 rounded-2xl space-y-4">
                 <h3 class="text-sm font-bold text-white">Thêm câu hỏi luyện nói mới</h3>
                 <form onsubmit="addNewQuestion(event)" class="space-y-3">
+                    <div>
+                        <label class="text-xs font-medium text-slate-400">Thêm vào Bài học số mấy?:</label>
+                        <select id="input-new-lesson-id" class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-cyan-400 font-bold focus:outline-none focus:border-indigo-500">
+                            <option value="1">Bài 1: Chào hỏi & Tên tuổi</option>
+                            <option value="2">Bài 2: Quốc tịch & Quê quán</option>
+                            <option value="3">Bài 3: Sở thích & Ăn uống</option>
+                        </select>
+                    </div>
                     <div>
                         <label class="text-xs font-medium text-slate-400">Câu hỏi tiếng Trung (Chữ Hán):</label>
                         <input type="text" id="input-new-zh" placeholder="VD: 你是哪国人？" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
@@ -375,11 +404,11 @@
                         <input type="text" id="input-new-vi" placeholder="VD: Bạn là người nước nào?" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
                     </div>
                     <div>
-                        <label class="text-xs font-medium text-slate-400">Gợi ý đáp án chuẩn tiếng Trung:</label>
-                        <input type="text" id="input-new-sample" placeholder="VD: 我是越南人。" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        <label class="text-xs font-medium text-slate-400">Gợi ý các cách trả lời đúng (Ngăn cách bởi dấu /):</label>
+                        <input type="text" id="input-new-sample" placeholder="VD: 我是越南人 / 来自越南" required class="w-full px-3 py-2 bg-slate-950 border border-slate-700 rounded-xl text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
                     </div>
                     <button type="submit" class="w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition-all">
-                        + Thêm Vào Danh Sách
+                        + Thêm Vào Bộ Đề Bài Học
                     </button>
                 </form>
             </div>
@@ -387,36 +416,67 @@
 
     </main>
 
-    <!-- JavaScript Application Engine -->
+    <!-- JAVASCRIPT APPLICATION ENGINE -->
     <script>
-        // State Management
-        let questions = [
-            {
-                id: 1,
-                zh: "你叫什么名字？",
-                pinyin: "Nǐ jiào shénme míngzì?",
-                vi: "Tên của bạn là gì?",
-                sampleZh: "我叫李华。",
-                samplePinyin: "Wǒ jiào Lǐ Huá."
-            },
-            {
-                id: 2,
-                zh: "你是哪国人？",
-                pinyin: "Nǐ shì nǎ guó rén?",
-                vi: "Bạn là người nước nào?",
-                sampleZh: "我是越南人。",
-                samplePinyin: "Wǒ shì Yuènán rén."
-            },
-            {
-                id: 3,
-                zh: "你喜欢吃什么？",
-                pinyin: "Nǐ xǐhuān chī shénme?",
-                vi: "Bạn thích ăn món gì?",
-                sampleZh: "我喜欢吃米饭。",
-                samplePinyin: "Wǒ xǐhuān chī mǐfàn."
+        // Password Security
+        const CLASS_PASSWORD = "666666";
+        function verifyClassPassword(e) {
+            e.preventDefault();
+            const inputPwd = document.getElementById('input-class-password').value;
+            if (inputPwd === CLASS_PASSWORD) {
+                document.getElementById('password-overlay').classList.add('hidden');
+            } else {
+                document.getElementById('password-error').classList.remove('hidden');
             }
-        ];
+        }
 
+        // Multi-Lesson Database
+        let lessonsData = {
+            "1": [
+                {
+                    id: 101,
+                    zh: "你叫什么名字？",
+                    pinyin: "Nǐ jiào shénme míngzì?",
+                    vi: "Tên của bạn là gì?",
+                    sampleZh: "我叫李华 / 我是李华",
+                    validAnswers: ["我叫", "我是", "叫"],
+                    samplePinyin: "Wǒ jiào Lǐ Huá / Wǒ shì Lǐ Huá"
+                },
+                {
+                    id: 102,
+                    zh: "你好吗？",
+                    pinyin: "Nǐ hǎo ma?",
+                    vi: "Bạn có khỏe không?",
+                    sampleZh: "我很好 / 我挺好的 / 还行",
+                    validAnswers: ["很好", "挺好", "还行", "不错", "好"],
+                    samplePinyin: "Wǒ hěn hǎo / Wǒ tǐng hǎo de"
+                }
+            ],
+            "2": [
+                {
+                    id: 201,
+                    zh: "你是哪国人？",
+                    pinyin: "Nǐ shì nǎ guó rén?",
+                    vi: "Bạn là người nước nào?",
+                    sampleZh: "我是越南人 / 我来自越南",
+                    validAnswers: ["我是越南人", "越南人", "来自越南"],
+                    samplePinyin: "Wǒ shì Yuènán rén"
+                }
+            ],
+            "3": [
+                {
+                    id: 301,
+                    zh: "你喜欢吃什么？",
+                    pinyin: "Nǐ xǐhuān chī shénme?",
+                    vi: "Bạn thích ăn gì?",
+                    sampleZh: "我喜欢吃中国菜 / 我喜欢吃米饭",
+                    validAnswers: ["喜欢吃", "我喜欢"],
+                    samplePinyin: "Wǒ xǐhuān chī Zhōngguó cài"
+                }
+            ]
+        };
+
+        let currentLessonId = "1";
         let currentQuestionIdx = 0;
         let mediaStream = null;
         let mediaRecorder = null;
@@ -426,7 +486,9 @@
         let recordTimerInterval = null;
         let speechRecognition = null;
         let recognizedText = "";
-        let submissions = [];
+        
+        // Track Student Question Results for Report Card
+        let studentAnswersReport = {};
 
         // DOM Ready
         window.onload = function() {
@@ -434,7 +496,6 @@
             initSpeechRecognition();
         };
 
-        // Navigation & Role Switch
         function switchRole(role) {
             const studentView = document.getElementById('student-view');
             const teacherView = document.getElementById('teacher-view');
@@ -444,29 +505,73 @@
             if (role === 'student') {
                 studentView.classList.remove('hidden');
                 teacherView.classList.add('hidden');
-                btnStudent.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
-                btnTeacher.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
+                btnStudent.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
+                btnTeacher.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
             } else {
                 studentView.classList.add('hidden');
                 teacherView.classList.remove('hidden');
-                btnTeacher.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
-                btnStudent.className = "px-3.5 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
-                renderTeacherSubmissions();
+                btnTeacher.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all bg-indigo-600 text-white shadow-md";
+                btnStudent.className = "px-3 py-1.5 text-xs font-semibold rounded-lg transition-all text-slate-400 hover:text-slate-200";
             }
         }
 
+        function changeLesson(lessonId) {
+            currentLessonId = lessonId;
+            currentQuestionIdx = 0;
+            studentAnswersReport = {}; 
+            renderCurrentQuestion();
+            updateReportCard();
+        }
+
+        function getCurrentQuestionsList() {
+            return lessonsData[currentLessonId] || [];
+        }
+
         function renderCurrentQuestion() {
-            const q = questions[currentQuestionIdx];
-            document.getElementById('question-index-tag').innerText = `Câu ${currentQuestionIdx + 1} / ${questions.length}`;
+            const currentQuestions = getCurrentQuestionsList();
+            if (currentQuestions.length === 0) return;
+
+            const q = currentQuestions[currentQuestionIdx];
+            document.getElementById('question-index-tag').innerText = `Bài ${currentLessonId} - Câu ${currentQuestionIdx + 1} / ${currentQuestions.length}`;
             document.getElementById('display-zh-question').innerText = q.zh;
             document.getElementById('display-pinyin').innerText = q.pinyin;
             document.getElementById('display-vi-meaning').innerText = `Dịch: ${q.vi}`;
             document.getElementById('display-sample-answer').innerText = q.sampleZh;
-            document.getElementById('display-sample-pinyin').innerText = q.samplePinyin;
+            document.getElementById('display-sample-pinyin').innerText = q.samplePinyin || "";
             
+            // Reset blur state for new question
+            document.getElementById('question-text-box').classList.add('blur-text');
+            document.getElementById('sample-text-box').classList.add('blur-text');
+            document.getElementById('eye-text').innerText = "Hiện chữ (Nếu khó nghe)";
+            document.getElementById('sample-eye-text').innerText = "Mở xem chữ";
+
             // Reset state
             document.getElementById('recognized-chinese-text').innerText = "...";
             document.getElementById('ai-evaluation-box').classList.add('hidden');
+        }
+
+        function toggleShowQuestion() {
+            const box = document.getElementById('question-text-box');
+            const eyeText = document.getElementById('eye-text');
+            if (box.classList.contains('blur-text')) {
+                box.classList.remove('blur-text');
+                eyeText.innerText = "Ẩn chữ";
+            } else {
+                box.classList.add('blur-text');
+                eyeText.innerText = "Hiện chữ (Nếu khó nghe)";
+            }
+        }
+
+        function toggleShowSample() {
+            const box = document.getElementById('sample-text-box');
+            const eyeText = document.getElementById('sample-eye-text');
+            if (box.classList.contains('blur-text')) {
+                box.classList.remove('blur-text');
+                eyeText.innerText = "Ẩn chữ gợi ý";
+            } else {
+                box.classList.add('blur-text');
+                eyeText.innerText = "Mở xem chữ";
+            }
         }
 
         function prevQuestion() {
@@ -477,33 +582,32 @@
         }
 
         function nextQuestion() {
-            if (currentQuestionIdx < questions.length - 1) {
+            const currentQuestions = getCurrentQuestionsList();
+            if (currentQuestionIdx < currentQuestions.length - 1) {
                 currentQuestionIdx++;
                 renderCurrentQuestion();
             }
         }
 
-        // Speech Synthesis (AI Teacher Avatar Voice)
         function playAIQuestion() {
-            const q = questions[currentQuestionIdx];
-            speakChinese(q.zh);
+            const currentQuestions = getCurrentQuestionsList();
+            const q = currentQuestions[currentQuestionIdx];
+            if (q) speakChinese(q.zh);
         }
 
         function playAISampleAnswer() {
-            const q = questions[currentQuestionIdx];
-            speakChinese(q.sampleZh);
+            const currentQuestions = getCurrentQuestionsList();
+            const q = currentQuestions[currentQuestionIdx];
+            if (q) speakChinese(q.sampleZh);
         }
 
         function speakChinese(text) {
-            if (!('speechSynthesis' in window)) {
-                alert('Trình duyệt của bạn không hỗ trợ đọc giọng nói!');
-                return;
-            }
+            if (!('speechSynthesis' in window)) return;
 
-            window.speechSynthesis.cancel(); // Stop ongoing speech
+            window.speechSynthesis.cancel();
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = 'zh-CN';
-            utterance.rate = 0.85; // Natural speaking pace
+            utterance.rate = 0.85;
 
             const avatarContainer = document.getElementById('avatar-container');
             const soundwave = document.getElementById('avatar-soundwave');
@@ -512,19 +616,19 @@
             utterance.onstart = () => {
                 avatarContainer.classList.add('avatar-speaking-glow');
                 soundwave.classList.remove('hidden');
-                mouth.setAttribute('d', 'M43 55 Q50 68 57 55'); // Open mouth animation
+                mouth.setAttribute('d', 'M43 55 Q50 68 57 55');
             };
 
             utterance.onend = () => {
                 avatarContainer.classList.remove('avatar-speaking-glow');
                 soundwave.classList.add('hidden');
-                mouth.setAttribute('d', 'M43 58 Q50 62 57 58'); // Reset mouth
+                mouth.setAttribute('d', 'M43 58 Q50 62 57 58');
             };
 
             window.speechSynthesis.speak(utterance);
         }
 
-        // Webcam & MediaRecorder Logic
+        // Camera Management with Graceful Error Handling
         async function toggleWebcam() {
             const videoElem = document.getElementById('webcam-preview');
             const placeholder = document.getElementById('cam-placeholder');
@@ -534,7 +638,6 @@
             const statusSubtext = document.getElementById('cam-status-subtext');
 
             if (mediaStream) {
-                // Stop Camera
                 mediaStream.getTracks().forEach(track => track.stop());
                 mediaStream = null;
                 videoElem.srcObject = null;
@@ -544,7 +647,6 @@
                 statusText.innerText = "Camera chưa được bật.";
                 statusSubtext.innerText = 'Nhấn "Bật Camera" bên dưới để bắt đầu quay bài làm.';
             } else {
-                // Start Camera
                 try {
                     mediaStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
                     videoElem.srcObject = mediaStream;
@@ -552,10 +654,9 @@
                     btnCam.innerHTML = `<i class="fa-solid fa-video-slash mr-1.5 text-rose-400"></i>Tắt Camera`;
                     btnRecord.disabled = false;
                 } catch (err) {
-                    console.error("Camera Access Error:", err);
                     placeholder.classList.remove('hidden');
-                    statusText.innerText = "Không thể kết nối Camera!";
-                    statusSubtext.innerText = "Bạn chưa cấp quyền truy cập Camera/Micro trên trình duyệt. Hãy kiểm tra lại biểu tượng ổ khóa ở thanh địa chỉ.";
+                    statusText.innerText = "Không thể truy cập Camera!";
+                    statusSubtext.innerText = "Bạn cần nhấn 'Cho Phép' (Allow) khi trình duyệt hỏi quyền truy cập Camera/Micro.";
                 }
             }
         }
@@ -589,9 +690,7 @@
             }
 
             mediaRecorder.ondataavailable = (event) => {
-                if (event.data.size > 0) {
-                    recordedChunks.push(event.data);
-                }
+                if (event.data.size > 0) recordedChunks.push(event.data);
             };
 
             mediaRecorder.onstop = () => {
@@ -606,12 +705,10 @@
             mediaRecorder.start();
             isRecording = true;
 
-            // UI Adjustments
             document.getElementById('btn-start-record').classList.add('hidden');
             document.getElementById('btn-stop-record').classList.remove('hidden');
             document.getElementById('recording-timer').classList.remove('hidden');
 
-            // Timer Counter
             let seconds = 0;
             recordTimerInterval = setInterval(() => {
                 seconds++;
@@ -620,7 +717,6 @@
                 document.getElementById('recording-timer').innerText = `● REC ${mins}:${secs}`;
             }, 1000);
 
-            // Start Speech Recognition Simultaneously
             startSTT();
         }
 
@@ -638,7 +734,7 @@
             }
         }
 
-        // Web Speech Recognition (STT & Automatic AI Grading)
+        // Speech Recognition Engine
         function initSpeechRecognition() {
             const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
             if (SpeechRecognition) {
@@ -658,7 +754,7 @@
 
                 speechRecognition.onend = () => {
                     document.getElementById('stt-status').innerText = "Đã hoàn thành nhận diện";
-                    evaluateAnswer();
+                    evaluateAnswerWithDetailedAnalysis();
                 };
             }
         }
@@ -666,7 +762,7 @@
         function startSTT() {
             if (speechRecognition) {
                 recognizedText = "";
-                document.getElementById('recognized-chinese-text').innerText = "Đang lắng nghe...";
+                document.getElementById('recognized-chinese-text').innerText = "Đang nghe học sinh phát âm...";
                 document.getElementById('stt-status').innerText = "Đang nhận diện giọng nói...";
                 try { speechRecognition.start(); } catch(e) {}
             }
@@ -678,124 +774,169 @@
             }
         }
 
-        function evaluateAnswer() {
-            const currentQ = questions[currentQuestionIdx];
-            const targetSample = currentQ.sampleZh;
-            
-            // Calculate similarity score
+        // ADVANCED AI EVALUATION & DETAILED ERROR DIAGNOSIS
+        function evaluateAnswerWithDetailedAnalysis() {
+            const currentQuestions = getCurrentQuestionsList();
+            const currentQ = currentQuestions[currentQuestionIdx];
+            if (!currentQ) return;
+
             let score = 0;
+            const targetSample = currentQ.sampleZh;
+            const validKeywords = currentQ.validAnswers || [targetSample];
+
+            let errorHtml = "";
+
             if (recognizedText && recognizedText.trim().length > 0) {
-                let matches = 0;
-                for (let char of targetSample) {
-                    if (recognizedText.includes(char)) matches++;
+                const cleanInput = recognizedText.replace(/[.,?!，。？！]/g, '').trim();
+
+                let matchedKeyword = false;
+                for (let keyword of validKeywords) {
+                    if (cleanInput.includes(keyword)) {
+                        matchedKeyword = true;
+                        break;
+                    }
                 }
-                score = Math.min(100, Math.round((matches / targetSample.length) * 100));
+
+                let matches = 0;
+                let missingChars = [];
+                for (let char of targetSample.replace(/[.,?!，。？！ /]/g, '')) {
+                    if (cleanInput.includes(char)) {
+                        matches++;
+                    } else {
+                        missingChars.push(char);
+                    }
+                }
+                let charScore = Math.round((matches / Math.max(targetSample.length, 1)) * 100);
+
+                if (matchedKeyword) {
+                    score = Math.max(90, charScore);
+                    errorHtml = `<p class="text-emerald-400 font-bold">✓ Học sinh trả lời đúng từ khóa cốt lõi!</p>`;
+                } else if (charScore >= 50) {
+                    score = Math.max(75, charScore);
+                    errorHtml = `<p class="text-amber-400 font-bold">⚠ Đúng ý nhưng phát âm ngọng hoặc thiếu chữ:</p>
+                                 <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
+                                 <p>Các từ phát âm chưa chuẩn/thiếu: <span class="text-rose-400 font-bold">${missingChars.join(', ') || 'Chưa rõ'}</span></p>`;
+                } else {
+                    score = Math.min(100, charScore);
+                    errorHtml = `<p class="text-rose-400 font-bold">❌ Trả lời chưa chính xác hoặc nói sai từ:</p>
+                                 <p class="mt-1">Học sinh đã nói: <span class="text-white">${cleanInput}</span></p>
+                                 <p>Đáp án chuẩn: <span class="text-cyan-300 font-bold">${targetSample}</span></p>`;
+                }
+            } else {
+                score = 0;
+                errorHtml = `<p class="text-rose-400">Không nghe thấy giọng nói của học sinh.</p>`;
             }
 
             const evalBox = document.getElementById('ai-evaluation-box');
             const scoreCircle = document.getElementById('eval-score-circle');
             const evalTitle = document.getElementById('eval-title');
             const evalDesc = document.getElementById('eval-desc');
+            const breakdownText = document.getElementById('error-breakdown-text');
 
             evalBox.classList.remove('hidden');
             scoreCircle.innerText = `${score}%`;
+            breakdownText.innerHTML = errorHtml;
 
             if (score >= 80) {
-                evalTitle.innerText = "Xuất sắc! Phát âm rất chuẩn";
-                evalDesc.innerText = "Câu nói của bạn rất rõ ràng và chuẩn xác.";
+                evalTitle.innerText = "Xuất sắc! Phát âm & Ý nghĩa rất chuẩn";
+                evalDesc.innerText = "AI đánh giá câu trả lời hợp lệ 100%.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 font-extrabold text-lg flex items-center justify-center";
             } else if (score >= 50) {
-                evalTitle.innerText = "Khá tốt! Cần luyện thêm giọng";
-                evalDesc.innerText = "AI nhận diện được phần lớn câu trả lời của bạn.";
+                evalTitle.innerText = "Khá tốt! Cần sửa lỗi từ phát âm";
+                evalDesc.innerText = "Xem chi tiết các từ bị sai ở khung phân tích bên dưới.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-400 font-extrabold text-lg flex items-center justify-center";
             } else {
-                evalTitle.innerText = "Cần cố gắng hơn";
-                evalDesc.innerText = "Hãy nghe lại câu mẫu của AI và phát âm to rõ hơn nhé.";
+                evalTitle.innerText = "Chưa đạt! Cần luyện tập lại";
+                evalDesc.innerText = "Học sinh trả lời chưa đúng đáp án hoặc chưa phát âm rõ.";
                 scoreCircle.className = "w-12 h-12 rounded-xl bg-rose-500/20 border border-rose-500/40 text-rose-400 font-extrabold text-lg flex items-center justify-center";
             }
+
+            // Auto save to student report
+            saveCurrentQuestionResult(score, errorHtml);
         }
 
-        // Submit Answer to Teacher Dashboard
-        function submitVideoAnswer() {
-            const studentName = document.getElementById('student-name-input').value || "Học sinh ẩn danh";
-            const q = questions[currentQuestionIdx];
+        function saveCurrentQuestionResult(scoreVal, errorHtmlVal) {
+            const currentQuestions = getCurrentQuestionsList();
+            const q = currentQuestions[currentQuestionIdx];
+            const scoreStr = document.getElementById('eval-score-circle').innerText;
 
-            const submission = {
-                id: Date.now(),
-                studentName: studentName,
+            studentAnswersReport[q.id] = {
                 questionZh: q.zh,
-                recognizedText: recognizedText || "Không nhận diện được giọng nói",
-                score: document.getElementById('eval-score-circle').innerText,
-                time: new Date().toLocaleTimeString('vi-VN') + " " + new Date().toLocaleDateString('vi-VN'),
-                videoUrl: lastRecordedBlob ? URL.createObjectURL(lastRecordedBlob) : null
+                studentSpoke: recognizedText || "Chưa phát âm",
+                score: scoreStr,
+                numericScore: parseInt(scoreStr) || 0,
+                errorDetail: document.getElementById('error-breakdown-text').innerHTML
             };
 
-            submissions.unshift(submission);
-            alert("✅ Nộp bài thành công! Giáo viên có thể xem video của bạn trong trang Quản Lý.");
+            updateReportCard();
         }
 
-        // Teacher Dashboard Tabs & Actions
-        function switchTeacherTab(tab) {
-            const subTab = document.getElementById('teacher-tab-submissions');
-            const questTab = document.getElementById('teacher-tab-questions');
-            const btnSub = document.getElementById('tab-btn-sub');
-            const btnQuest = document.getElementById('tab-btn-quest');
+        function updateReportCard() {
+            const studentName = document.getElementById('student-name-input').value || "Nguyễn Văn A";
+            document.getElementById('report-student-name').innerText = `Họ tên: ${studentName}`;
+            document.getElementById('report-lesson-name').innerText = `Bài làm: Bài ${currentLessonId}`;
 
-            if (tab === 'submissions') {
-                subTab.classList.remove('hidden');
-                questTab.classList.add('hidden');
-                btnSub.className = "px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold";
-                btnQuest.className = "px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold";
-            } else {
-                subTab.classList.add('hidden');
-                questTab.classList.remove('hidden');
-                btnQuest.className = "px-4 py-2 bg-indigo-600 text-white rounded-xl text-xs font-bold";
-                btnSub.className = "px-4 py-2 bg-slate-800 text-slate-300 rounded-xl text-xs font-bold";
-            }
-        }
-
-        function renderTeacherSubmissions() {
-            const container = document.getElementById('submissions-container');
+            const container = document.getElementById('report-questions-list');
             container.innerHTML = "";
 
-            if (submissions.length === 0) {
-                container.innerHTML = `<p class="text-xs text-slate-500 col-span-full italic">Chưa có bài nộp nào từ học sinh.</p>`;
-                return;
-            }
+            const currentQuestions = getCurrentQuestionsList();
+            let totalScoresSum = 0;
+            let answeredCount = 0;
 
-            submissions.forEach(sub => {
+            currentQuestions.forEach((q, idx) => {
+                const rep = studentAnswersReport[q.id];
                 const card = document.createElement('div');
-                card.className = "bg-slate-900 border border-slate-800 p-4 rounded-2xl space-y-3";
-                card.innerHTML = `
-                    <div class="flex items-center justify-between">
-                        <span class="text-xs font-bold text-cyan-400">${sub.studentName}</span>
-                        <span class="text-[10px] text-slate-500">${sub.time}</span>
-                    </div>
-                    <div class="text-xs space-y-1">
-                        <p class="text-slate-400">Câu hỏi: <strong class="text-white">${sub.questionZh}</strong></p>
-                        <p class="text-slate-400">AI Nhận diện: <strong class="text-amber-300">${sub.recognizedText}</strong></p>
-                        <p class="text-slate-400">Điểm số AI: <strong class="text-emerald-400">${sub.score}</strong></p>
-                    </div>
-                    ${sub.videoUrl ? `<video src="${sub.videoUrl}" controls class="w-full aspect-video rounded-xl bg-black object-cover"></video>` : '<p class="text-[11px] text-slate-600">Không có video</p>'}
-                `;
+                card.className = "bg-slate-900/80 border border-slate-800 p-3.5 rounded-xl space-y-1 text-xs";
+
+                if (rep) {
+                    totalScoresSum += rep.numericScore;
+                    answeredCount++;
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-white">Câu ${idx + 1}: ${q.zh}</span>
+                            <span class="font-black ${rep.numericScore >= 80 ? 'text-emerald-400' : (rep.numericScore >= 50 ? 'text-amber-400' : 'text-rose-400')}">${rep.score}</span>
+                        </div>
+                        <p class="text-slate-400">HS phát âm: <strong class="text-amber-300 font-zh">${rep.studentSpoke}</strong></p>
+                        <div class="text-[11px] mt-1 pt-1 border-t border-slate-800/80">${rep.errorDetail}</div>
+                    `;
+                } else {
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between">
+                            <span class="font-bold text-slate-400">Câu ${idx + 1}: ${q.zh}</span>
+                            <span class="text-slate-600 font-bold">Chưa làm</span>
+                        </div>
+                    `;
+                }
                 container.appendChild(card);
             });
+
+            const avgScore = answeredCount > 0 ? Math.round(totalScoresSum / currentQuestions.length) : 0;
+            document.getElementById('report-total-score').innerText = `${avgScore}%`;
         }
 
         function addNewQuestion(e) {
             e.preventDefault();
+            const targetLessonId = document.getElementById('input-new-lesson-id').value;
             const newQ = {
-                id: questions.length + 1,
+                id: Date.now(),
                 zh: document.getElementById('input-new-zh').value,
                 pinyin: document.getElementById('input-new-pinyin').value,
                 vi: document.getElementById('input-new-vi').value,
                 sampleZh: document.getElementById('input-new-sample').value,
+                validAnswers: document.getElementById('input-new-sample').value.split('/'),
                 samplePinyin: ""
             };
-            questions.push(newQ);
-            alert("✅ Đã thêm câu hỏi mới vào danh sách!");
+
+            if (!lessonsData[targetLessonId]) {
+                lessonsData[targetLessonId] = [];
+            }
+            lessonsData[targetLessonId].push(newQ);
+
+            alert(`✅ Đã thêm câu hỏi mới vào Bài ${targetLessonId}!`);
             e.target.reset();
-            renderCurrentQuestion();
+            
+            document.getElementById('lesson-select').value = targetLessonId;
+            changeLesson(targetLessonId);
         }
     </script>
 </body>
